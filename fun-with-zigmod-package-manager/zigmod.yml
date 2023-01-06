@@ -1,0 +1,6 @@
+id: ybgp4lqar9a3100jupcozp3flxfwg1jrmj9449vttviscsld
+name: fun-with-zigmod-package-manager
+license: unliscensed
+description: tbd
+root_dependencies:
+  - src: git https://github.com/jecolon/ziglyph
