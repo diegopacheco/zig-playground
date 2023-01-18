@@ -31,6 +31,15 @@ fn rev(str: []u8,comptime size:usize) []u8 {
     return &result;
 }
 
-test "simple test" {
-    try std.testing.expectEqual(@as(i32, 42), 42);
+test "simple test: hello==olleh" {
+    var original = "hello".*;
+    var expected = "olleh".*;
+    std.debug.print("\noriginal {any} -> {s} \n",.{original,original});
+    std.debug.print("expected {any} -> {s} \n",.{expected,expected});
+    var result = rev(&original,original.len);
+    
+    var i: usize = 0;
+    while(i <= result.len - 1): (i += 1) {
+        try std.testing.expectEqual(expected[i],result[i]);
+    }
 }
