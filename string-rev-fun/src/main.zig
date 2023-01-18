@@ -1,22 +1,34 @@
 const std = @import("std");
 
 pub fn main() !void {
-    comptime var original = "hello";
+    var original = "hello".*;
     std.debug.print("String {s}\n",.{original});
     std.debug.print("Debug {any}\n",.{original});
 
-    var reversed = comptime rev(u8,original.len,original);
+    // gets the string literal as slice
+    var reversed = rev(&original,original.len);
+
+    // hello == olleh
+    std.debug.print("Reversed {s}\n",.{reversed});
     std.debug.print("Reversed {any}\n",.{reversed});
 }
 
-fn rev(comptime T: type,comptime size:usize, str: ?[]const T) [size]T {
-    var result: [size]u8 = [_]u8{0} ** size;
-    var indexStr = size - 1;
-    for(str) |index| {
-        result[index] = str[indexStr];
+// size need to be know at compile time - thats why comptime
+fn rev(str: []u8,comptime size:usize) []u8 {
+    // how to initialize an array with zeros
+    var result = [_]u8{0} ** size;
+
+    var indexStr:u8 = size - 1;
+    var i: usize = 0;
+    while(i <= str.len - 1): (i += 1) {
+        std.debug.print(">> DEBUG: index {} indexStr {} char {} \n",.{i,indexStr,str[i]});
+        result[i] = str[indexStr];
+        if (i==str.len-1){
+            break;
+        }
         indexStr -= 1;
     }
-    return result;
+    return &result;
 }
 
 test "simple test" {
