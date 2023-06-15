@@ -1,4 +1,14 @@
+## Zig
 zig-out/
 zig-cache/
 .idea/
 .zigmod/
+
+## Lib and Rust
+target/
+*.so
+*.so.o
+
+## Exe
+main
+main.o
