@@ -1,16 +1,24 @@
 const std = @import("std");
+const json = std.json;
+const AllocWhen = json.AllocWhen;
+const ValueTree = json.ValueTree;
 
 pub fn main() !void {
-    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
-    defer arena.deinit();
-    const allocator = arena.allocator();
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
 
     const Response = struct {
         headers: struct {
             Host: []const u8,
-            @"User-Agent": []const u8,
+            // error: MissingField
+            // User_Agent: []const u8,
         },
     };
+    _ = Response;
+
+    var parser = std.json.Parser.init(allocator, AllocWhen.alloc_if_needed);
+    defer parser.deinit();
+
     const input =
         \\ {
         \\ "headers": {
@@ -20,11 +28,8 @@ pub fn main() !void {
         \\   "X-Amzn-Trace-Id": "Root=1-632f00bb-04724a8831e8b65c47175bba"
         \\ } }
     ;
-    var stream = std.json.TokenStream.init(input);
-    const resp = try std.json.parse(Response, &stream, .{
-        .allocator = allocator,
-        .ignore_unknown_fields = true,
-    });
-    std.log.info("Host: {s}", .{resp.headers.Host});
-    std.log.info("User-Agent: {s}", .{resp.headers.@"User-Agent"});
+
+    const result = parser.parse(input);
+    var value = result.value;
+    try std.debug.print("{any}", .{value});
 }
