@@ -1,34 +1,24 @@
 const std = @import("std");
-const json = std.json;
-const AllocWhen = json.AllocWhen;
-const ValueTree = json.ValueTree;
+const Allocator = std.mem.Allocator;
+
+const Config = struct {
+    root: struct {
+        roots: struct {
+            port: []const u8,
+        },
+    },
+};
 
 pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    var arena = std.heap.ArenaAllocator.init(gpa.allocator());
-    defer arena.deinit();
-    const allocator = arena.allocator();
+    const allocator = gpa.allocator();
 
-    const Response = struct {
-        headers: struct {
-            Host: []const u8,
-            // error: MissingField
-            // User_Agent: []const u8,
-        },
-    };
+    const config = try readConfig(allocator, "config.json");
+    std.debug.print("port: {s}\n", .{config.root.roots.port});
+}
 
-    var parser = std.json.Parser.init(allocator, AllocWhen.alloc_if_needed);
-    defer parser.deinit();
-
-    const input =
-        \\ {
-        \\ "headers": {
-        \\   "Accept": "application/vnd.github.v3+json",
-        \\   "Host": "httpbin.org",
-        \\   "User-Agent": "my http client",
-        \\   "X-Amzn-Trace-Id": "Root=1-632f00bb-04724a8831e8b65c47175bba"
-        \\ } }
-    ;
-    var value = std.json.parseFromSlice(Response, allocator, input, .{});
-    try std.debug.print("{any}", .{value});
+fn readConfig(allocator: Allocator, path: []const u8) !Config {
+    const data = try std.fs.cwd().readFileAlloc(allocator, path, 512);
+    defer allocator.free(data);
+    return try std.json.parseFromSlice(Config, allocator, data, .{});
 }
