@@ -4,13 +4,16 @@ const json = @import("json");
 const allocator = std.heap.page_allocator;
 
 const Point = struct { x: i32, y: i32 };
+const string =
+    \\{
+    \\  "x": 1,
+    \\  "y": 2
+    \\}
+;
 
 pub fn main() anyerror!void {
-    const point = Point{ .x = 1, .y = 2 };
+    const point = try json.fromSlice(allocator, Point, string);
 
-    const string = try json.toSlice(allocator, point);
-    defer allocator.free(string);
-
-    // {"x":1,"y":2}
-    std.debug.print("{s}\n", .{string});
+    // Point{ .x = 1, .y = 2 }
+    std.debug.print("{any}\n", .{point});
 }
