@@ -1,5 +1,6 @@
 id: qmguyob8e8twizenanu97vc2rrc7g49saccb967bc68s4p6g
-name: y
+name: getty-fun
 license: Unliseced
 description: TBD
 root_dependencies:
+  https://github.com/getty-zig/json/

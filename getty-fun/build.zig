@@ -8,7 +8,7 @@ pub fn build(b: *std.Build) void {
     const json_mod = b.dependency("json", opts).module("json");
 
     const exe = b.addExecutable(.{
-        .name = "quick-start",
+        .name = "getty-fun",
         .root_source_file = .{ .path = "src/main.zig" },
         .target = target,
         .optimize = optimize,
