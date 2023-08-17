@@ -1,42 +1,36 @@
 const std = @import("std");
 
+const Cat = struct {
+    anger_level: usize,
+
+    pub fn talk(self: Cat) void {
+        std.debug.print("Cat: meow! (anger lvl {})", .{self.anger_level});
+    }
+};
+
 const Dog = struct {
-    // Fields
-    barkFn: fn (self: *const Dog, volume: u32) void,
+    name: []const u8,
 
-    // Methods
-    pub fn bark(self: *const Dog, volume: u32) void {
-        self.barkFn(self, volume);
+    pub fn talk(self: Dog) void {
+        std.debug.print("{s} the dog: bark!", .{self.name});
     }
 };
 
-const Retriever = struct {
-    // Fields
-    dog: Dog = Dog{ .barkFn = bark },
+const Animal = union(enum) {
+    cat: Cat,
+    dog: Dog,
 
-    // Methods
-    fn bark(dog: *const Dog, volume: u32) void {
-        _ = volume;
-        _ = dog;
-        std.log.info("Wolf Wolf !\n", .{});
-    }
-};
-
-const Pinscher = struct {
-    // Fields
-    dog: Dog = Dog{ .barkFn = bark },
-
-    // Methods
-    fn bark(dog: *const Dog, volume: u32) void {
-        _ = volume;
-        _ = dog;
-        std.log.info("I will kill you mofo!\n", .{});
+    pub fn talk(self: Animal) void {
+        switch (self) {
+            .cat => |cat| cat.talk(),
+            .dog => |dog| dog.talk(),
+        }
     }
 };
 
 pub fn main() !void {
-    comptime var dogs = [_]Dog{ (Pinscher{}).dog, (Retriever{}).dog };
-    for (dogs) |dog| {
-        dog.bark(50);
+    var animals = [_]Dog{Dog{ .name = "Dogy" }};
+    for (animals) |animal| {
+        animal.talk();
     }
 }
