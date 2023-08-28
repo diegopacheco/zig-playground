@@ -1,11 +1,15 @@
 const std = @import("std");
 const zbench = @import("zbench");
 
-fn benchmarkMyFunction(b: *zbench.Benchmark) void {
+fn while3k() void {
     var i: u64 = 0;
     while (i <= 3000) {
         i += 1;
     }
+}
+
+fn benchmarkMyFunction(b: *zbench.Benchmark) void {
+    _ = while3k();
     b.incrementOperations(1);
 }
 
