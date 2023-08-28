@@ -2,7 +2,7 @@ const std = @import("std");
 const zbench = @import("zbench");
 
 fn benchmarkMyFunction(b: *zbench.Benchmark) void {
-    var i = 0;
+    var i: u64 = 0;
     while (i <= 3000) {
         i += 1;
     }
