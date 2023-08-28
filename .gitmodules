@@ -1,0 +1,3 @@
+[submodule "zbench-fun/lib/libs/zbench"]
+	path = zbench-fun/lib/libs/zbench
+	url = https://github.com/hendriknielaender/zBench
