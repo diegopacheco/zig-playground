@@ -1,0 +1,82 @@
+name: Create Release, update README, send announcement
+
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }}
+
+    - name: Set tag name
+      id: tag
+      run: |
+        echo "::set-output name=version::${GITHUB_REF#refs/tags/}"
+
+    # we don't build pkghash, we provide it in ./tools
+    # - uses: goto-bus-stop/setup-zig@v2
+    #   with:
+    #     version: master
+    # - name: Check zig version
+    #   run: zig version
+    # - name: Build pkghash tool
+    #   run: zig build pkghash
+
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        tools/announceybot.exe release-notes "${{ steps.tag.outputs.version }}" > relnotes.md
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.tag.outputs.version }} # Remove 'refs/tags/' from the tag name
+        body_path: relnotes.md
+        prerelease: true
+
+    - name: Announce Release
+      env:
+        TAG_NAME: ${{ steps.tag.outputs.version }}
+        WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      run: |
+        tools/announceybot.exe announce "${TAG_NAME}"
+
+
+    # README update
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        ref: refs/heads/master
+
+    - name: Run script to update README
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        TAG_NAME: ${{ steps.tag.outputs.version }}
+      run: |
+        tools/announceybot.exe update-readme "${TAG_NAME}"
+
+    - name: Commit and push if it has changed
+      run: |
+        git diff
+        git checkout master
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git commit -am "Update README"
+        git push origin master
+

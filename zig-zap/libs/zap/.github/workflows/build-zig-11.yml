@@ -1,0 +1,27 @@
+name: Works with Zig 0.11.0
+on: 
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+  workflow_dispatch:
+  
+jobs:
+  ci:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.11.0
+      - name: Check zig version
+        run: zig version
+      - name: Build all examples
+        run: ./build_all.sh
+      - name: Run all tests
+        run: zig build test

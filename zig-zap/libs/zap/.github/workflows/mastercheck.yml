@@ -1,0 +1,30 @@
+name: Works with Zig master
+on: 
+  #   push:
+  #     branches:
+  #     - master
+  #   pull_request:
+  #     branches:
+  #     - master
+  #   schedule:
+  #     - cron: "0 0 * * *"
+  workflow_dispatch:
+  
+jobs:
+  ci:
+    strategy:
+      matrix:
+        # platform: [ubuntu-latest, windows-latest, macos-latest]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: master
+      - name: Check zig version
+        run: zig version
+      - name: Build all examples
+        run: ./build_all.sh
+      - name: Run all tests
+        run: zig build test
