@@ -24,6 +24,14 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
+    const zig_strings_module = b.addModule("zig_string", .{
+        .source_file = .{ .path = "libs/zig-strings/zig-string.zig" },
+        .dependencies = &.{
+        },
+    });
+    exe.addModule("zig_string", zig_strings_module);
+
+
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
     // step when running `zig build`).
