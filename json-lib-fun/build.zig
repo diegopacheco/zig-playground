@@ -24,14 +24,22 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    const getty_module = b.addModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } });
-    exe.addModule("getty", getty_module);
+    //const getty_module = b.addModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } });
+    //exe.addModule("getty", getty_module);
 
-    const ser_module = b.addModule("ser", .{ .source_file = .{ .path = "libs/json/src/ser.zig" } });
-    exe.addModule("ser", ser_module);
+    //const ser_module = b.addModule("ser", .{ .source_file = .{ .path = "libs/json/src/ser.zig" } });
+    //exe.addModule("ser", ser_module);
 
-    const de_module = b.addModule("de", .{ .source_file = .{ .path = "libs/json/src/de.zig" } });
-    exe.addModule("de", de_module);
+    //const de_module = b.addModule("de", .{ .source_file = .{ .path = "libs/json/src/de.zig" } });
+    //exe.addModule("de", de_module);
+
+    const lib = b.addStaticLibrary(.{
+        .name = "getty",
+        .root_source_file = .{ .path = "libs/getty/src/getty.zig" },
+        .target = .{},
+        .optimize = optimize,
+    });
+    b.installArtifact(lib);
 
     const json_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/json.zig" } });
     exe.addModule("json", json_module);
