@@ -1,0 +1,68 @@
+name: test
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup-zig
+        uses: goto-bus-stop/setup-zig@v2
+
+      - name: lint
+        run: |
+          zig fmt --check src/
+          zig fmt --check build.zig
+
+  build-unix:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup-zig
+        uses: goto-bus-stop/setup-zig@v2
+
+      - name: build
+        run: zig build
+
+      - name: test
+        run: zig build test
+
+  build-windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: setup-git
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: setup-zig
+        uses: goto-bus-stop/setup-zig@v2
+
+      - name: build
+        run: |
+          zig build -Dtarget=x86_64-windows --prefix tmp
+          zig build
+
+      - name: test
+        run: zig build test

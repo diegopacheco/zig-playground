@@ -1,3 +1,9 @@
 [submodule "zbench-fun/lib/libs/zbench"]
 	path = zbench-fun/lib/libs/zbench
 	url = https://github.com/hendriknielaender/zBench
+[submodule "json-lib-fun/libs/libs/json"]
+	path = json-lib-fun/libs/libs/json
+	url = https://github.com/getty-zig/json.git
+[submodule "json-lib-fun/libs/libs/libs/getty"]
+	path = json-lib-fun/libs/libs/libs/getty
+	url = https://github.com/getty-zig/getty.git

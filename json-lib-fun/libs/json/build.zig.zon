@@ -1,0 +1,9 @@
+.{
+    .name = "json",
+    .version = "0.4.0",
+    .dependencies = .{
+        .getty = .{
+            .url = "https://github.com/getty-zig/getty/archive/be323b613198c1ef64ed0be7696519481aceb3aa.tar.gz"
+        },
+    },
+}
