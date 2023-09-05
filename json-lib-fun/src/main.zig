@@ -22,7 +22,7 @@ fn serialization() anyerror!void {
 }
 
 fn deserialization() anyerror!void {
-    std.debug.print("Derialization === \n", .{});
+    std.debug.print("Deserialization === \n", .{});
 
     const stringJson =
         \\{

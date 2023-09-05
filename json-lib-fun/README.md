@@ -1,6 +1,5 @@
 ### Build
 ```bash
-cd libs/libs/json
 zig build
 ```
 ### Run
