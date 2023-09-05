@@ -14,9 +14,9 @@ pub fn main() !void {
     try myString.concat(", World 🔥");
     
     if (myString.cmp("🔥 Hello, World 🔥")){
-        std.debug.print("OK = {any}\n", .{myString});
+        std.debug.print("OK = {s}\n", .{myString.str()});
     }else{
-        std.debug.print("Oopsy Daisy  = {any}\n", .{myString});
+        std.debug.print("Oopsy Daisy  = {s}\n", .{myString.str()});
     }
     
 }
