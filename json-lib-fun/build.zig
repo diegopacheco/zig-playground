@@ -27,14 +27,14 @@ pub fn build(b: *std.Build) void {
     const getty_module = b.addModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } });
     exe.addModule("getty", getty_module);
 
+    const ser_module = b.addModule("ser", .{ .source_file = .{ .path = "libs/json/src/ser.zig" } });
+    exe.addModule("ser", ser_module);
+
+    const de_module = b.addModule("de", .{ .source_file = .{ .path = "libs/json/src/de.zig" } });
+    exe.addModule("de", de_module);
+
     const json_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/json.zig" } });
     exe.addModule("json", json_module);
-
-    const ser_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/ser.zig" } });
-    exe.addModule("json", ser_module);
-
-    const de_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/de.zig" } });
-    exe.addModule("json", de_module);
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
