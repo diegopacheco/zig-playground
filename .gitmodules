@@ -7,3 +7,6 @@
 [submodule "json-lib-fun/libs/libs/libs/getty"]
 	path = json-lib-fun/libs/libs/libs/getty
 	url = https://github.com/getty-zig/getty.git
+[submodule "zig-strings-lib/libs/zig-strings"]
+	path = zig-strings-lib/libs/zig-strings
+	url = https://github.com/JakubSzark/zig-string.git
