@@ -24,24 +24,16 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    //const getty_module = b.addModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } });
-    //exe.addModule("getty", getty_module);
-
-    //const ser_module = b.addModule("ser", .{ .source_file = .{ .path = "libs/json/src/ser.zig" } });
-    //exe.addModule("ser", ser_module);
-
-    //const de_module = b.addModule("de", .{ .source_file = .{ .path = "libs/json/src/de.zig" } });
-    //exe.addModule("de", de_module);
-
-    const getty_module = b.addModule("getty", .{
-        .source_file = .{ .path = "getty" },
+    //
+    // I'm adding a module that has dependency in another module.
+    // json dependency, depend on getty, so I have to do this in order to make it work.
+    //
+    const json_module = b.addModule("json", .{
+        .source_file = .{ .path = "libs/json/src/json.zig" },
         .dependencies = &.{
-            .{ .name = "getty", .module = b.addModule("getty", .{ .source_file = .{ .path = "../getty/src/getty.zig" } }) },
+            .{ .name = "getty", .module = b.addModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } }) },
         },
     });
-    exe.addModule("getty", getty_module);
-
-    const json_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/json.zig" } });
     exe.addModule("json", json_module);
 
     // This declares intent for the executable to be installed into the
