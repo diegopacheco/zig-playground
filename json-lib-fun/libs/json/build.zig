@@ -10,17 +10,19 @@ pub fn build(b: *std.build.Builder) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // Dependencies.
-    const dep_opts = .{ .target = target, .optimize = optimize };
+    //const dep_opts = .{ .target = target, .optimize = optimize,};
 
-    const getty_module = b.dependency("getty", dep_opts).module("getty");
+    //const getty_module = b.dependency("getty", dep_opts).module("getty");
 
     // Export Getty JSON as a module.
-    const json_module = b.addModule(package_name, .{
-        .source_file = .{ .path = package_path },
-        .dependencies = &.{
-            .{ .name = "getty", .module = getty_module },
-        },
-    });
+    //const json_module = b.addModule(package_name, .{
+    //  .source_file = .{ .path = package_path },
+    //        .dependencies = &.{
+    //            .{ .name = "getty", .module = getty_module },
+    //},
+    //    });
+
+    const getty_module = b.addModule("getty", .{ .source_file = .{ .path = "../getty/src/getty.zig" } });
 
     // Tests.
     {
@@ -37,7 +39,7 @@ pub fn build(b: *std.build.Builder) void {
             .filter = "encode",
         });
 
-        t_ser.addModule("json", json_module);
+        t_ser.addModule("getty", getty_module);
         test_ser_step.dependOn(&b.addRunArtifact(t_ser).step);
         test_all_step.dependOn(test_ser_step);
 
@@ -50,7 +52,7 @@ pub fn build(b: *std.build.Builder) void {
             .filter = "parse",
         });
 
-        t_de.addModule("json", json_module);
+        t_de.addModule("getty", getty_module);
         test_de_step.dependOn(&b.addRunArtifact(t_de).step);
         test_all_step.dependOn(test_de_step);
     }

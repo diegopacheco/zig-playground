@@ -24,15 +24,11 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
 
-    const getty_path = "libs/getty/src/getty.zig";
-    exe.addAnonymousModule("getty", .{
-        .source_file = .{ .path = getty_path },
-    });
+    const getty_module = b.addModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } });
+    exe.addModule("getty", getty_module);
 
-    const json_path = "libs/json/src/json.zig";
-    exe.addAnonymousModule("json", .{
-        .source_file = .{ .path = json_path },
-    });
+    const json_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/json.zig" } });
+    exe.addModule("json", json_module);
 
     // This declares intent for the executable to be installed into the
     // standard location when the user invokes the "install" step (the default
