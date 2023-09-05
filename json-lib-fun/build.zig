@@ -33,8 +33,13 @@ pub fn build(b: *std.Build) void {
     //const de_module = b.addModule("de", .{ .source_file = .{ .path = "libs/json/src/de.zig" } });
     //exe.addModule("de", de_module);
 
-    exe.addAnonymousModule("getty", .{ .source_file = .{ .path = "libs/getty/src/getty.zig" } });
-    b.installArtifact(exe);
+    const getty_module = b.addModule("getty", .{
+        .source_file = .{ .path = "getty" },
+        .dependencies = &.{
+            .{ .name = "getty", .module = b.addModule("getty", .{ .source_file = .{ .path = "../getty/src/getty.zig" } }) },
+        },
+    });
+    exe.addModule("getty", getty_module);
 
     const json_module = b.addModule("json", .{ .source_file = .{ .path = "libs/json/src/json.zig" } });
     exe.addModule("json", json_module);
