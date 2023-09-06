@@ -10,3 +10,6 @@
 [submodule "zig-strings-lib/libs/zig-strings"]
 	path = zig-strings-lib/libs/zig-strings
 	url = https://github.com/JakubSzark/zig-string.git
+[submodule "iter-zig-fun/libs/iter-zig"]
+	path = iter-zig-fun/libs/iter-zig
+	url = https://github.com/eldesh/iter-zig.git
