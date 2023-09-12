@@ -10,6 +10,10 @@ pub fn main() !void {
 	};
 	std.debug.print("{s}'s lucky is {d}\n", .{john.name, john.lucky_number});
     john.print();
+
+    const mary = User.new("Mary Jane", 2);
+    mary.print();
+
 }
 
 test "simple test" {
