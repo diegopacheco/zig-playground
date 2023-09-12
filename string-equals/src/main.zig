@@ -14,6 +14,13 @@ const Person = struct {
         };
     }
 
+    //
+    // compare byte by byte (std.mem.eql)
+    //
+    //
+    // Zig does not have strings, just array and slices of bytes
+    // []const u8 is how you create a byte[] which will be a "string"
+    //
     pub fn equals(self: Person,other: Person) bool {
         return 
                self.id == other.id and 
