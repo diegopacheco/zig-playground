@@ -9,6 +9,7 @@ pub fn main() !void {
 		.name = "John Doe",
 	};
 	std.debug.print("{s}'s lucky is {d}\n", .{john.name, john.lucky_number});
+    john.print();
 }
 
 test "simple test" {
