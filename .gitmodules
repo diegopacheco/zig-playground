@@ -13,3 +13,6 @@
 [submodule "iter-zig-fun/libs/iter-zig"]
 	path = iter-zig-fun/libs/iter-zig
 	url = https://github.com/eldesh/iter-zig.git
+[submodule "iter-zig-fun/libs/basis_concept"]
+	path = iter-zig-fun/libs/basis_concept
+	url = https://github.com/eldesh/basis_concept-zig.git
