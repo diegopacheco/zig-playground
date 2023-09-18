@@ -16,3 +16,6 @@
 [submodule "iter-zig-fun/libs/basis_concept"]
 	path = iter-zig-fun/libs/basis_concept
 	url = https://github.com/eldesh/basis_concept-zig.git
+[submodule "zig-clap-fun/libs/clap"]
+	path = zig-clap-fun/libs/clap
+	url = https://github.com/Hejsil/zig-clap.git
