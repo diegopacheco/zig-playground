@@ -1,6 +1,7 @@
 const std = @import("std");
 const print = @import("std").debug.print;
 const mem = @import("std").mem;
+const ascii = @import("std").ascii;
 
 pub fn main() !void {
     char_type();
@@ -8,6 +9,7 @@ pub fn main() !void {
     replace_string_with_char();
     try string_to_int();
     compare_strings();
+    char_utils_is_digit_alpha_num();
     concat_string_with_char();
 }
 
@@ -41,6 +43,12 @@ fn compare_strings() void {
     if (result) {
         print("2 strings are equal! \n", .{});
     }
+}
+
+fn char_utils_is_digit_alpha_num() void {
+    var num = ascii.isDigit('7');
+    var letter = ascii.isAlphabetic('B');
+    print("Num: {} Aplha: {}", .{ num, letter });
 }
 
 fn concat_string_with_char() void {
