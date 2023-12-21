@@ -12,7 +12,7 @@ pub fn main() !void {
     compare_strings();
     char_utils_is_digit_alpha_num();
     try concat_string_with_char();
-    simple_coorse_string_with_char();
+    simple_coerce_string_with_char();
 }
 
 fn char_type() void {
@@ -67,11 +67,11 @@ fn concat_string_with_char() !void {
     debug_type(list.items);
 }
 
-fn simple_coorse_string_with_char() void {
+fn simple_coerce_string_with_char() void {
     const str: []const u8 = "Whats Up";
-    const char = '?';
-    _ = char;
-    const message: []const u8 = str ++ &.{"hello"};
+    const char: u8 = '?';
+    const char_str: []const u8 = &char;
+    const message: []const u8 = str ++ char_str;
     print("Simple coorse result is == ", .{message});
     debug_type(message);
 }
