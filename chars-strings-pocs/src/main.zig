@@ -2,6 +2,7 @@ const std = @import("std");
 const print = @import("std").debug.print;
 const mem = @import("std").mem;
 const ascii = @import("std").ascii;
+const ArrayList = std.ArrayList;
 
 pub fn main() !void {
     char_type();
@@ -10,7 +11,7 @@ pub fn main() !void {
     try string_to_int();
     compare_strings();
     char_utils_is_digit_alpha_num();
-    concat_string_with_char();
+    try concat_string_with_char();
 }
 
 fn char_type() void {
@@ -48,14 +49,21 @@ fn compare_strings() void {
 fn char_utils_is_digit_alpha_num() void {
     var num = ascii.isDigit('7');
     var letter = ascii.isAlphabetic('B');
-    print("Num: {} Aplha: {}", .{ num, letter });
+    print("Num: {} Aplha: {} \n", .{ num, letter });
 }
 
-fn concat_string_with_char() void {
-    //var s = "Hello World";
-    //const c = '!';
-    //const result = concat(c, s);
-    //debug_type(result);
+fn concat_string_with_char() !void {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
+
+    var list = ArrayList(u8).init(allocator);
+    defer list.deinit();
+    try list.appendSlice("Hello World");
+    const char = '!';
+    try list.appendSlice(&.{char});
+    print("concat string with char == {s} - ", .{list.items});
+    debug_type(list.items);
 }
 
 fn debug_type(t: anytype) void {
