@@ -68,9 +68,13 @@ fn concat_string_with_char() !void {
 }
 
 fn simple_coerce_string_with_char() void {
+    var arena = std.heap.ArenaAllocator.init(std.heap.page_allocator);
+    defer arena.deinit();
+    const allocator = arena.allocator();
+
     const str: []const u8 = "Whats Up";
     const char: u8 = '?';
-    const char_str: []const u8 = &char;
+    const char_str = try std.mem.concat(allocator, u8, &[_][]const u8{ str, char });
     const message: []const u8 = str ++ char_str;
     print("Simple coorse result is == ", .{message});
     debug_type(message);
