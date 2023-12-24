@@ -6,6 +6,7 @@ const ArrayList = std.ArrayList;
 
 pub fn main() !void {
     char_type();
+    slices();
     direct_concat();
     replace_string_with_char();
     try string_to_int();
@@ -17,6 +18,13 @@ pub fn main() !void {
 fn char_type() void {
     const c = 'A';
     debug_type(c);
+}
+
+fn slices() void {
+    var array: [5]u8 = .{ 'D', 'i', 'e', 'g', 'o' };
+    var slice: []u8 = array[0..];
+    print("Slice == {s} ", .{slice});
+    debug_type(slice);
 }
 
 fn direct_concat() void {
