@@ -6,6 +6,9 @@ There is a bunch of experiments.
 ### Rationale - Strings in Zig
 
 Zig has String literals, when you do "hello world" this is a hardcoded string, Zig compiler does something called String interning to remove duplicates(https://en.wikipedia.org/wiki/String_interning). When using string lerals you are not using the Stack memory, you are always dealing with pointers.
+<br/>
+<br/>
+Zig does not have a String type per se."Strings" are just arrays of bytes. 
 
 ### Recipes(functions) on the POC
 
