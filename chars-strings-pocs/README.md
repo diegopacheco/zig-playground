@@ -18,6 +18,10 @@ Slices are similars to arrays but the difference is the lack of size, for instan
 var slice: []u8 = array[0..];
 ```
 So, what is a Slice? It's a pointer + length, which does not own memory.
+What about returning or mutating strings and return in functions?
+1. You can return string literal ([]const u8)
+2. You can recive a buffer and append on the buffer
+3. You can have an allocator(recive the allocator) and do dynamyc allocation.
 
 ### Recipes(functions) on the POC
 
