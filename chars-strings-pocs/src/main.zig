@@ -7,6 +7,8 @@ const ArrayList = std.ArrayList;
 pub fn main() !void {
     char_type();
     slices();
+    print("return slice [{s}] ", .{return_string_literal()});
+    debug_type(return_string_literal());
     direct_concat();
     replace_string_with_char();
     try string_to_int();
@@ -18,6 +20,10 @@ pub fn main() !void {
 fn char_type() void {
     const c = 'A';
     debug_type(c);
+}
+
+fn return_string_literal() []const u8 {
+    return "It works!";
 }
 
 fn slices() void {
