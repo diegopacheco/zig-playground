@@ -16,9 +16,11 @@ Slices are similars to arrays but the difference is the lack of size, for instan
 ```Zig
 var slice: []u8 = array[0..];
 ```
+So, what is a Slice? It's a pointer + length, which does not own memory.
 
 ### Recipes(functions) on the POC
 
+* Slices (slices)
 * Direct concatenate 2 String literals (direct_concat)
 * Convert String literal to integer (string_to_int)
 * Replace char by index in String (replace_string_with_char)
