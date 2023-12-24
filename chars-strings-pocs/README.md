@@ -5,10 +5,11 @@ There is a bunch of experiments.
 
 ### Rationale - Strings in Zig
 
-Zig has String literals, when you do "hello world" this is a hardcoded string, Zig compiler does something called String interning to remove duplicates(https://en.wikipedia.org/wiki/String_interning). When using string lerals you are not using the Stack memory, you are always dealing with pointers.
+Zig has String literals, when you do "hello world" this is a hardcoded string, Zig compiler does something called String interning to remove duplicates(https://en.wikipedia.org/wiki/String_interning). When using string literals you are not using the Stack memory, you are always dealing with pointers.
 <br/>
 <br/>
-Zig does not have a String type per se."Strings" are just arrays of bytes. There are Arrays and Slices:
+Zig does not have a String type per se."Strings" are just arrays of bytes. Strings literal in Zig have a null terminator at the end, which makes it compatible with C language. <br/>
+There are Arrays and Slices:
 ```Zig
 var array:[5]u8 = .{'d','i','e','g','o'};
 ```
