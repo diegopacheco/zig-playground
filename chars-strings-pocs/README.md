@@ -22,6 +22,8 @@ What about returning or mutating strings and return in functions?
 1. You can return string literal ([]const u8)
 2. You can recive a buffer and append on the buffer
 3. You can have an allocator(recive the allocator) and do dynamyc allocation.
+4. You can return a buffer like [5]u8 as long the the caller is holding it (this is not ideal because how do you know the
+right size of the string, you will make it bigger and will be inneficient)
 
 ### Recipes(functions) on the POC
 
