@@ -4,6 +4,10 @@ const Point = @import("Point.zig");
 pub fn main() !void {
     var p: Point = Point.default();
     std.debug.print("Point {} ", .{p});
+
+    var p2: Point = Point.new(2, 2);
+    var diff = Point.distance(p, p2);
+    std.debug.print("Ditance {} and {} is == {}", .{ p, p2, diff });
 }
 
 test "simple test" {
