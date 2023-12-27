@@ -2,8 +2,8 @@ const std = @import("std");
 const print = std.debug.print;
 const net = std.net;
 
+const addr = net.Address.initIp4(.{ 127, 0, 0, 1 }, 7496);
 pub fn main() !void {
-    const addr = net.Address.initIp4(.{ 127, 0, 0, 1 }, 4200);
     const options = net.StreamServer.Options{};
     const server = net.StreamServer.init(options);
 
