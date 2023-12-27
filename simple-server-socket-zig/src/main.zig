@@ -2,12 +2,12 @@ const std = @import("std");
 const print = std.debug.print;
 const net = std.net;
 
-const addr = std.net.Address.initIp4(.{ 127, 0, 0, 1 }, 4300);
 pub fn main() !void {
+    const addr = net.Address.initIp4(.{ 127, 0, 0, 1 }, 4200);
     const options = net.StreamServer.Options{};
     const server = net.StreamServer.init(options);
 
-    _ = try server.listen(server, addr);
+    _ = try server.listen(addr);
     print("Socket Server listening on port: {s}\n", .{addr});
 
     while (true) {
