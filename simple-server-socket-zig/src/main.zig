@@ -1,24 +1,25 @@
 const std = @import("std");
+const print = std.debug.print;
+const net = std.net;
 
+const addr = std.net.Address.initIp4(.{ 127, 0, 0, 1 }, 4300);
 pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    const options = net.StreamServer.Options{};
+    const server = net.StreamServer.init(options);
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+    _ = try server.listen(server, addr);
+    print("Socket Server listening on port: {s}\n", .{addr});
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+    while (true) {
+        const client = try server.accept();
+        const client_addr = client.address;
+        const stream = client.stream;
 
-    try bw.flush(); // don't forget to flush!
-}
+        var buffer: [258]u8 = undefined;
+        _ = try stream.read(&buffer);
+        _ = try stream.write("Hey from the server");
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+        print("Socket client addr is: {s}\n", .{client_addr});
+        print("Request buffer is: {s}\n", .{buffer});
+    }
 }
