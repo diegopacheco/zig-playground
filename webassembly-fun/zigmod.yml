@@ -1,0 +1,6 @@
+id: jjrlzwgt8kpz4380bmbs1jjtxha2jyn84epcv71o82jfgche
+name: webassembly-fun
+main: src/main.zig
+license: unliscsed
+description: TBD
+dependencies:
