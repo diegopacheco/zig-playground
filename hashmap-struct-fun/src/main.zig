@@ -22,6 +22,31 @@ const Person = struct {
     }
 };
 
+const PersonDAO = struct {
+    map: std.AutoHashMap(usize, Person),
+
+    fn new(allocator: std.mem.Allocator) PersonDAO {
+        return .{ .map = std.AutoHashMap(usize, Person).init(allocator) };
+    }
+
+    fn deinit(self: *PersonDAO) void {
+        self.map.deinit();
+    }
+
+    fn put(self: *PersonDAO, person: Person) !bool {
+        try self.map.put(person.id, person);
+        return true;
+    }
+
+    fn get(self: PersonDAO, id: usize) ?Person {
+        return self.map.get(id);
+    }
+
+    fn remove(self: *PersonDAO, id: usize) ?Person {
+        return if (self.map.fetchRemove(id)) |p| p.value else null;
+    }
+};
+
 pub fn main() !void {}
 
 test "simple test" {
