@@ -44,9 +44,9 @@ pub fn Stack(comptime T: type) type {
         }
 
         pub fn pop(self: *Self) !T {
-            if (self.tail) |t| {
-                var result: T = t;
-                self.tail = t.prev;
+            if (self.tail) |tail| {
+                var result: T = tail;
+                self.tail = tail.prev;
                 return result;
             }
         }
@@ -58,8 +58,8 @@ pub fn Stack(comptime T: type) type {
         //  https://stackoverflow.com/questions/75886431/why-do-i-need-constcast-here-is-there-better-way
         //
         pub fn size(self: *Self) usize {
-            if (self.tail) |t| {
-                return t.count;
+            if (self.tail) |tail| {
+                return tail.count;
             }
             return 0;
         }

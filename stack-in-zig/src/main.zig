@@ -11,6 +11,7 @@ pub fn main() !void {
     var count: usize = stack.size();
     print("Stack created[count: {} allocator: {any}] \n ", .{ count, @TypeOf(stack.allocator) });
 
+    stack.print();
     _ = try stack.push(1);
     _ = try stack.push(2);
     _ = try stack.push(3);
