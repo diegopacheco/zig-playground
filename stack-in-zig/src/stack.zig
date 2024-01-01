@@ -5,7 +5,7 @@ pub fn Stack(comptime T: type) type {
     return struct {
         allocator: std.mem.Allocator,
 
-        var tail: ?*Node = null;
+        var tail: ?*Node = undefined;
         const Self = @This();
 
         const Node = struct {
@@ -24,10 +24,10 @@ pub fn Stack(comptime T: type) type {
             }
         }
 
-        pub fn push(self: *Self, value: T) !usize {
+        pub fn push(self: Self, value: T) !usize {
             var newNode: Node = .{ .prev = null, .value = value, .count = 1 };
             var count: usize = 1;
-            if (@constCast(&self.tail)) |n| {
+            if (self.tail) |n| {
                 newNode.prev = n;
                 newNode.count = n.count + 1;
                 count = newNode.count;
@@ -50,9 +50,10 @@ pub fn Stack(comptime T: type) type {
         //  error: expected type '*stack.Stack(i32)', found '*const stack.Stack(i32)'
         //  Zig parameters are always immutable thans why implicit const
         //  the fix is: @constCast()
+        //  https://stackoverflow.com/questions/75886431/why-do-i-need-constcast-here-is-there-better-way
         //
         pub fn size(self: *Self) usize {
-            if (@constCast(&self.tail)) |t| {
+            if (self.tail) |t| {
                 return t.count;
             }
             return 0;
