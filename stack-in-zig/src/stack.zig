@@ -32,16 +32,12 @@ pub fn Stack(comptime T: type) type {
             var newNode: *Node = try self.allocator.create(Node);
             newNode.value = value;
 
-            var count: usize = 1;
             if (self.tail) |n| {
                 newNode.prev = n;
-                newNode.count = n.count + 1;
-                count = newNode.count;
-            } else {
-                self.tail = newNode;
-                count = newNode.count;
+                newNode.count += 1;
             }
-            return count;
+            self.tail = newNode;
+            return newNode.count;
         }
 
         pub fn pop(self: *Self) !T {
@@ -65,8 +61,8 @@ pub fn Stack(comptime T: type) type {
             return 0;
         }
 
-        pub fn print(self: Self) void {
-            var current: Node = self.tail;
+        pub fn print(self: *Self) void {
+            var current: *Self = self.tail;
             while (current) |curr| {
                 std.debug.print(" <- {s} ", .{curr});
                 curr = curr.prev;
