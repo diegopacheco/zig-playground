@@ -71,11 +71,12 @@ pub fn Stack(comptime T: type) type {
         }
 
         pub fn print(self: *Self) void {
-            if (self.tail) |tail| {
-                var current: Node = tail.*;
-                while (current != null) |curr| {
-                    std.debug.print(" <- {s} ", .{curr});
-                    curr = curr.prev;
+            std.debug.print("Stack size: {d} \n", .{self.size()});
+            if (self.tail) |_| {
+                var current: Node = @as(Node, self.tail);
+                while (current) {
+                    std.debug.print("element: {d} \n", .{current.value});
+                    current = current.prev;
                 }
                 std.debug.print("\n", .{});
             }
