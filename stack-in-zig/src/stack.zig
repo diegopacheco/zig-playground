@@ -36,9 +36,9 @@ pub fn Stack(comptime T: type) type {
             newNode.prev = null;
             newNode.count = 1;
 
-            if (self.tail) |tail| {
-                newNode.count = tail.count + 1;
-                newNode.prev = tail;
+            if (self.tail) |t| {
+                newNode.count = t.count + 1;
+                newNode.prev = t;
             }
             self.tail = newNode;
 
@@ -46,10 +46,10 @@ pub fn Stack(comptime T: type) type {
         }
 
         pub fn pop(self: *Self) !?T {
-            if (self.tail) |tail| {
-                self.tail = tail.prev;
-                var value = tail.value;
-                self.allocator.destroy(tail);
+            if (self.tail) |t| {
+                self.tail = t.prev;
+                var value = t.value;
+                self.allocator.destroy(t);
                 return value;
             }
             return null;
@@ -62,15 +62,15 @@ pub fn Stack(comptime T: type) type {
         //  https://stackoverflow.com/questions/75886431/why-do-i-need-constcast-here-is-there-better-way
         //
         pub fn size(self: *Self) usize {
-            if (self.tail) |tail| {
-                return tail.count;
+            if (self.tail) |t| {
+                return t.count;
             }
             return 0;
         }
 
         pub fn poll(self: *Self) ?T {
-            if (self.tail) |tail| {
-                return tail;
+            if (self.tail) |t| {
+                return t;
             }
             return null;
         }
