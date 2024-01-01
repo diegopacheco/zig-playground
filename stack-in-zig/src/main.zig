@@ -27,6 +27,33 @@ pub fn main() !void {
     stack.print();
 }
 
-test "simple test" {
-    try std.testing.expectEqual(@as(i32, 42), 42);
+test "stack.size" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try ds.Stack(i32).init(allocator);
+    defer stack.deinit();
+    try std.testing.expectEqual(@as(usize, 0), stack.size());
+}
+
+test "stack.push and stack.pop" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try ds.Stack(i32).init(allocator);
+    defer stack.deinit();
+
+    _ = try stack.push(1);
+    _ = try stack.push(2);
+    _ = try stack.push(3);
+
+    try std.testing.expectEqual(@as(usize, 3), stack.size());
+
+    _ = try stack.pop();
+    _ = try stack.pop();
+    _ = try stack.pop();
+
+    try std.testing.expectEqual(@as(usize, 0), stack.size());
 }
