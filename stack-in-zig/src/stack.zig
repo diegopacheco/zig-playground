@@ -2,16 +2,18 @@ const std = @import("std");
 const print = std.debug.print;
 
 pub fn Stack(comptime T: type) type {
+    const Node = struct {
+        value: T,
+        prev: ?*Self,
+        count: usize,
+        const Self = @This();
+    };
+
     return struct {
         allocator: std.mem.Allocator,
         tail: ?*Node,
 
         const Self = @This();
-        const Node = struct {
-            value: T,
-            prev: ?*Node,
-            count: usize,
-        };
 
         pub fn init(allocator: std.mem.Allocator) !Self {
             return .{ .allocator = allocator, .tail = undefined };
@@ -69,12 +71,14 @@ pub fn Stack(comptime T: type) type {
         }
 
         pub fn print(self: *Self) void {
-            var current: *Self = self.tail;
-            while (current) |curr| {
-                std.debug.print(" <- {s} ", .{curr});
-                curr = curr.prev;
+            if (self.tail) |tail| {
+                var current = tail;
+                while (current != null) {
+                    std.debug.print(" <- {s} ", .{current});
+                    current = current.prev;
+                }
+                std.debug.print("\n", .{});
             }
-            std.debug.print("\n", .{});
         }
     };
 }
