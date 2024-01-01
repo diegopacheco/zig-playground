@@ -45,12 +45,12 @@ pub fn Stack(comptime T: type) type {
             return newNode.count;
         }
 
-        pub fn pop(self: *Self) !T {
+        pub fn pop(self: *Self) !?T {
             if (self.tail) |tail| {
-                defer self.allocator.destroy(tail);
-
                 self.tail = tail.prev;
-                return tail.value;
+                var value = tail.value;
+                self.allocator.destroy(tail);
+                return value;
             }
             return null;
         }

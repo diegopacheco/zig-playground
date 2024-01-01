@@ -15,6 +15,16 @@ pub fn main() !void {
     _ = try stack.push(2);
     _ = try stack.push(3);
     stack.print();
+
+    // If you call no pop you get:
+    //  error(gpa): memory address 0x7fccd8dfa000 leaked:
+    //  Because we allocated 3 elements and we did not kill them, so we need to deinit.
+    // comment lines 24, 25 and 26 to see the issue.
+
+    _ = try stack.pop();
+    _ = try stack.pop();
+    _ = try stack.pop();
+    stack.print();
 }
 
 test "simple test" {
