@@ -9,9 +9,19 @@ pub fn main() !void {
     w.print();
 }
 
-test "Wrapper test" {
+test "Wrapper test get_value" {
     var w = IntWrapper{
         .value = 42,
     };
     try std.testing.expectEqual(@as(i32, 42), w.get_value());
+}
+
+test "Wrapper test eql" {
+    var w = IntWrapper{
+        .value = 42,
+    };
+    var x = IntWrapper{
+        .value = 42,
+    };
+    try std.testing.expectEqual(w.get_value(), x.get_value());
 }

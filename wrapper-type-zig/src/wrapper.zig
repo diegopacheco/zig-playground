@@ -14,6 +14,14 @@ pub fn Wrapper(comptime T: type) type {
             return self.value;
         }
 
+        pub fn eql(self: *Self, other: *Self) bool {
+            return if (self.value == other.value) {
+                true;
+            } else {
+                false;
+            };
+        }
+
         pub fn print(self: *Self) void {
             linfo("Wrapper type [{}] value: [{}] \n", .{ @TypeOf(self), self.value });
         }
