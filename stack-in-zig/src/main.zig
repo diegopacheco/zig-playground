@@ -8,6 +8,7 @@ pub fn main() !void {
     var allocator = gpa.allocator();
 
     var stack = try ds.Stack(i32).init(allocator);
+    defer stack.deinit();
 
     stack.print();
     _ = try stack.push(1);

@@ -33,13 +33,15 @@ pub fn Stack(comptime T: type) type {
         pub fn push(self: *Self, value: T) !usize {
             var newNode: *Node = try self.allocator.create(Node);
             newNode.value = value;
+            newNode.prev = null;
             newNode.count = 1;
 
             if (self.tail) |tail| {
-                newNode.prev = tail;
                 newNode.count = tail.count + 1;
+                newNode.prev = tail;
             }
             self.tail = newNode;
+
             return newNode.count;
         }
 
