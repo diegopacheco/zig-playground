@@ -4,10 +4,9 @@ const print = std.debug.print;
 pub fn Stack(comptime T: type) type {
     return struct {
         allocator: std.mem.Allocator,
+        tail: ?*Node,
 
-        var tail: ?*Node = undefined;
         const Self = @This();
-
         const Node = struct {
             value: T,
             prev: ?*Node,
@@ -15,7 +14,7 @@ pub fn Stack(comptime T: type) type {
         };
 
         pub fn init(allocator: std.mem.Allocator) !Self {
-            return .{ .allocator = allocator };
+            return .{ .allocator = allocator, .tail = undefined };
         }
 
         pub fn deinit(self: *Self) void {
@@ -24,8 +23,15 @@ pub fn Stack(comptime T: type) type {
             }
         }
 
-        pub fn push(self: Self, value: T) !usize {
-            var newNode: Node = .{ .prev = null, .value = value, .count = 1 };
+        //
+        //  error: cannot assign to constant
+        //  pub fn push(self: Self ...
+        //  fix: pub fn push(self: *Self ...
+        //
+        pub fn push(self: *Self, value: T) !usize {
+            var newNode: *Node = try self.allocator.create(Node);
+            newNode.value = value;
+
             var count: usize = 1;
             if (self.tail) |n| {
                 newNode.prev = n;
@@ -59,7 +65,7 @@ pub fn Stack(comptime T: type) type {
             return 0;
         }
 
-        pub fn print(self: *Self) void {
+        pub fn print(self: Self) void {
             var current: Node = self.tail;
             while (current) |curr| {
                 std.debug.print(" <- {s} ", .{curr});

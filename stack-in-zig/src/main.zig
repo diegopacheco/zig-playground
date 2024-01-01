@@ -14,7 +14,7 @@ pub fn main() !void {
     _ = try stack.push(1);
     _ = try stack.push(2);
     _ = try stack.push(3);
-    _ = try stack.print();
+    stack.print();
 }
 
 test "simple test" {
