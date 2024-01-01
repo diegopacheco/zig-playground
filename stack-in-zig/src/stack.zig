@@ -27,7 +27,7 @@ pub fn Stack(comptime T: type) type {
         pub fn push(self: *Self, value: T) !usize {
             var newNode: Node = .{ .prev = null, .value = value, .count = 1 };
             var count: usize = 1;
-            if (self.tail) |n| {
+            if (@constCast(&self.tail)) |n| {
                 newNode.prev = n;
                 newNode.count = n.count + 1;
                 count = newNode.count;
@@ -40,14 +40,19 @@ pub fn Stack(comptime T: type) type {
 
         pub fn pop(self: *Self) !T {
             if (self.tail) |t| {
-                var result: Node = t;
+                var result: T = t;
                 self.tail = t.prev;
                 return result;
             }
         }
 
-        pub fn size(self: Self) usize {
-            if (self.tail) |t| {
+        //
+        //  error: expected type '*stack.Stack(i32)', found '*const stack.Stack(i32)'
+        //  Zig parameters are always immutable thans why implicit const
+        //  the fix is: @constCast()
+        //
+        pub fn size(self: *Self) usize {
+            if (@constCast(&self.tail)) |t| {
                 return t.count;
             }
             return 0;
