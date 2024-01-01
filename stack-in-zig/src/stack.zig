@@ -68,6 +68,11 @@ pub fn Stack(comptime T: type) type {
             return 0;
         }
 
+        //
+        // error: capture shadows declaration of 'tail'
+        //       if (self.tail) |tail| {
+        // FIX:  if (self.tail) |t| {
+        //
         pub fn poll(self: *Self) ?T {
             if (self.tail) |t| {
                 return t;
