@@ -8,12 +8,12 @@ pub fn main() !void {
     var allocator = gpa.allocator();
 
     const stack = try ds.Stack(i32).init(allocator);
-    print("Stack created[count: {d} allocator: {any}] \n ", .{ stack.size(), @TypeOf(stack.allocator) });
+    print("Stack created[count: {} allocator: {any}] \n ", .{ stack.size(), @TypeOf(stack.allocator) });
 
-    try stack.push(1);
-    try stack.push(2);
-    try stack.push(3);
-    try stack.print();
+    _ = try stack.push(1);
+    _ = try stack.push(2);
+    _ = try stack.push(3);
+    _ = try stack.print();
 }
 
 test "simple test" {

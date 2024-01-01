@@ -4,7 +4,8 @@ const print = std.debug.print;
 pub fn Stack(comptime T: type) type {
     return struct {
         allocator: std.mem.Allocator,
-        tail: ?Node,
+
+        var tail: ?*Node = null;
         const Self = @This();
 
         const Node = struct {
@@ -14,23 +15,22 @@ pub fn Stack(comptime T: type) type {
         };
 
         pub fn init(allocator: std.mem.Allocator) !Self {
-            return .{ .allocator = allocator, .tail = null };
+            return .{ .allocator = allocator };
         }
 
-        pub fn deinit(self: Self) void {
-            if (self.tail) |t| {
-                self.allocator.destroy(t);
+        pub fn deinit(self: *Self) void {
+            if (self.tail) |n| {
+                self.allocator.destroy(n);
             }
         }
 
-        pub fn push(self: Self, value: T) !usize {
+        pub fn push(self: *Self, value: T) !usize {
             var newNode: Node = .{ .prev = null, .value = value, .count = 1 };
-            var count: i32 = 1;
-            if (self.tail) |t| {
-                newNode.prev = *t;
-                newNode.count = t.count + 1;
+            var count: usize = 1;
+            if (self.tail) |n| {
+                newNode.prev = n;
+                newNode.count = n.count + 1;
                 count = newNode.count;
-                newNode = t;
             } else {
                 self.tail = newNode;
                 count = newNode.count;
