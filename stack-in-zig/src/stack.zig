@@ -61,6 +61,13 @@ pub fn Stack(comptime T: type) type {
             return 0;
         }
 
+        pub fn poll(self: *Self) ?T {
+            if (self.tail) |tail| {
+                return tail;
+            }
+            return null;
+        }
+
         pub fn print(self: *Self) void {
             var current: *Self = self.tail;
             while (current) |curr| {
