@@ -8,8 +8,6 @@ pub fn main() !void {
     var allocator = gpa.allocator();
 
     var stack = try ds.Stack(i32).init(allocator);
-    var count: usize = stack.size();
-    print("Stack created[count: {} allocator: {any}]\n", .{ count, @TypeOf(stack.allocator) });
 
     stack.print();
     _ = try stack.push(1);
