@@ -11,6 +11,12 @@ pub fn Stack(comptime T: type) type {
 
     return struct {
         allocator: std.mem.Allocator,
+
+        //
+        // Sucks that all fileds in structs are always public
+        // here: https://www.reddit.com/r/Zig/comments/13v6q2z/struct_fields_are_always_public_by_design/
+        // also sucks there is not interface in zig.
+        //
         tail: ?*Node,
 
         const Self = @This();
