@@ -16,7 +16,7 @@ pub fn Stack(comptime T: type) type {
         const Self = @This();
 
         pub fn init(allocator: std.mem.Allocator) !Self {
-            return .{ .allocator = allocator, .tail = undefined };
+            return .{ .allocator = allocator, .tail = null };
         }
 
         pub fn deinit(self: *Self) void {
