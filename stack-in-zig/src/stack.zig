@@ -32,8 +32,8 @@ pub fn Stack(comptime T: type) type {
         //
         pub fn push(self: *Self, value: T) !usize {
             var newNode: *Node = try self.allocator.create(Node);
-            newNode.count = 1;
             newNode.value = value;
+            newNode.count = 1;
 
             if (self.tail) |tail| {
                 newNode.prev = tail;
@@ -81,8 +81,8 @@ pub fn Stack(comptime T: type) type {
         pub fn print(self: *Self) void {
             std.debug.print("Stack size: {d} \n", .{self.size()});
             var current: ?*Node = self.tail;
-            while (current) |curr| : (current = curr.prev) {
-                std.debug.print("element: {d} \n", .{curr.value});
+            while (current) |c| : (current = c.prev) {
+                std.debug.print("element: {d} \n", .{c.value});
             }
             std.debug.print("\n", .{});
         }
