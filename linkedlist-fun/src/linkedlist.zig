@@ -123,6 +123,10 @@ pub fn DoubleLinkedList(comptime T: type) type {
             return Errors.ElementNotFound;
         }
 
+        pub fn size(self: *Self) usize {
+            return self.count;
+        }
+
         pub fn print(self: *Self) void {
             if (self.tail) |_| {
                 dprint(">>> DLL size is: {d}\n", .{self.count});
@@ -141,4 +145,15 @@ pub fn DoubleLinkedList(comptime T: type) type {
             }
         }
     };
+}
+
+test "DLL.add" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var alloc = gpa.allocator();
+
+    var dll = try DoubleLinkedList(i32).init(alloc);
+    defer dll.deinit();
+    _ = try dll.add(1);
+    try std.testing.expectEqual(@as(i32, 1), dll.size());
 }
