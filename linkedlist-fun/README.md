@@ -141,6 +141,53 @@ pub fn add(self: *Self, value: T) !bool {
 Zig param arguments are immutable by default <BR/> somethimes you will see implicit `const`
 https://stackoverflow.com/questions/74021886/how-do-i-mutate-a-zig-function-argument
 
+Pearhaps the most obscrure so far...
+```
+Segmentation fault at address 0x0
+```
+Wrong:
+```Rust
+        pub fn add(self: *Self, value: T) !bool {
+            var newNode: *Node = try self.allocator.create(Node);
+            newNode.value = value;
+
+            if (self.tail) |safe_tail| {
+                newNode.prev = safe_tail;
+                safe_tail.next = newNode;
+            } else {
+                self.head = newNode;
+            }
+            self.tail = newNode;
+            self.count += 1;
+            return true;
+        }
+```
+Right:
+```Rust
+        pub fn add(self: *Self, value: T) !bool {
+            var newNode: *Node = try self.allocator.create(Node);
+            newNode.value = value;
+            newNode.prev = null;
+            newNode.next = null;
+
+            if (self.tail) |safe_tail| {
+                newNode.prev = safe_tail;
+                safe_tail.next = newNode;
+            } else {
+                self.head = newNode;
+            }
+            self.tail = newNode;
+            self.count += 1;
+            return true;
+        }
+```
+Yes - null initialization to sub-strcut pointer is necessary !!!
+```Rust
+newNode.prev = null;
+newNode.next = null;
+```
+
+
 ### Tests Result Output
 ```bash
 zig test src/linkedlist.zig
