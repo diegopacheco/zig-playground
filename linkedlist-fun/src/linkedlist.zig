@@ -98,9 +98,9 @@ pub fn DoubleLinkedList(comptime T: type) type {
                         if (curr == self.head) {
                             dprint("* Removing head \n", .{});
                             var temp: *Node = curr;
+                            var newHead: *Node = curr.next.?;
+                            self.head = newHead;
                             self.allocator.destroy(temp);
-                            self.head = null;
-                            self.tail = null;
                         } else if (curr == self.tail) {
                             dprint("* Removing tail \n", .{});
                             var temp: *Node = curr;
@@ -191,7 +191,7 @@ test "DLL.get" {
     try std.testing.expectEqual(@as(i32, 5), result);
 }
 
-test "DLL.remove" {
+test "DLL.remove tail" {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     var alloc = gpa.allocator();
@@ -206,6 +206,44 @@ test "DLL.remove" {
     try std.testing.expectEqual(@as(usize, 5), dll.size());
 
     _ = try dll.remove(4);
+    try std.testing.expectEqual(@as(usize, 4), dll.size());
+    dll.print();
+}
+
+test "DLL.remove head" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var alloc = gpa.allocator();
+
+    var dll = try DoubleLinkedList(i32).init(alloc);
+    defer dll.deinit();
+    _ = try dll.add(1);
+    _ = try dll.add(2);
+    _ = try dll.add(3);
+    _ = try dll.add(4);
+    _ = try dll.add(5);
+    try std.testing.expectEqual(@as(usize, 5), dll.size());
+
+    _ = try dll.remove(0);
+    try std.testing.expectEqual(@as(usize, 4), dll.size());
+    dll.print();
+}
+
+test "DLL.remove middle" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var alloc = gpa.allocator();
+
+    var dll = try DoubleLinkedList(i32).init(alloc);
+    defer dll.deinit();
+    _ = try dll.add(1);
+    _ = try dll.add(2);
+    _ = try dll.add(3);
+    _ = try dll.add(4);
+    _ = try dll.add(5);
+    try std.testing.expectEqual(@as(usize, 5), dll.size());
+
+    _ = try dll.remove(2);
     try std.testing.expectEqual(@as(usize, 4), dll.size());
     dll.print();
 }
