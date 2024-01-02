@@ -51,11 +51,10 @@ pub fn DoubleLinkedList(comptime T: type) type {
             if (self.tail) |safe_tail| {
                 newNode.prev = safe_tail;
                 safe_tail.next = newNode;
-                self.tail = newNode;
             } else {
                 self.head = newNode;
-                self.tail = newNode;
             }
+            self.tail = newNode;
             self.count += 1;
             return true;
         }
