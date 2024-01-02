@@ -98,8 +98,12 @@ pub fn DoubleLinkedList(comptime T: type) type {
                         if (curr == self.head) {
                             dprint("* Removing head \n", .{});
                             var temp: *Node = curr;
-                            var newHead: *Node = curr.next.?;
-                            self.head = newHead;
+                            if (curr.next) |_| {
+                                var newHead: *Node = curr.next.?;
+                                self.head = newHead;
+                            } else {
+                                self.head = null;
+                            }
                             self.allocator.destroy(temp);
                         } else if (curr == self.tail) {
                             dprint("* Removing tail \n", .{});
@@ -245,5 +249,28 @@ test "DLL.remove middle" {
 
     _ = try dll.remove(2);
     try std.testing.expectEqual(@as(usize, 4), dll.size());
+    dll.print();
+}
+
+test "DLL.remove middle to all" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var alloc = gpa.allocator();
+
+    var dll = try DoubleLinkedList(i32).init(alloc);
+    defer dll.deinit();
+    _ = try dll.add(1);
+    _ = try dll.add(2);
+    _ = try dll.add(3);
+    _ = try dll.add(4);
+    _ = try dll.add(5);
+    try std.testing.expectEqual(@as(usize, 5), dll.size());
+
+    _ = try dll.remove(2);
+    _ = try dll.remove(0);
+    _ = try dll.remove(0);
+    _ = try dll.remove(0);
+    _ = try dll.remove(0);
+    try std.testing.expectEqual(@as(usize, 0), dll.size());
     dll.print();
 }
