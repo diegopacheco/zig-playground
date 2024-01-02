@@ -25,6 +25,10 @@ print        : Print all elements of the DLL.
 
 ### Useful things in Zig
 
+*Memory Management*: Everything you allocate with `std.mem.Allocator` <BR/> 
+needs to be `destroy` before the program ends otherwise <BR/> 
+Zig will give you an error sayign the memory has leeked. <BR/> 
+
 1. How to unwrap some optional value? 
 ```Rust
 var temp: ?*Node = curr.next;  // Optional becase ?
@@ -66,6 +70,29 @@ pub fn DoubleLinkedList(comptime T: type) type {
          // print
      }
 ``` 
+
+### Learning from Errors
+```
+error: use of undeclared identifier 'Node'
+```
+Wrong
+```Rust
+    const Node = struct {
+        value: T,
+        next: Node,
+        prev: ?*Self,
+        const Self = @This();
+    };
+```
+Right:
+```Rust
+    const Node = struct {
+        value: T,
+        next: ?*Self,
+        prev: ?*Self,
+        const Self = @This();
+    };
+```
 
 ### Tests Result Output
 ```bash
