@@ -84,7 +84,7 @@ pub fn DoubleLinkedList(comptime T: type) type {
             return remove(self, 0);
         }
 
-        pub fn remove_tail(self: *Self) !T {
+        pub fn remove_last(self: *Self) !T {
             return remove(self, self.count - 1);
         }
 
@@ -298,10 +298,10 @@ test "DLL.remove middle, tail to all" {
     try std.testing.expectEqual(@as(usize, 5), dll.size());
 
     _ = try dll.remove(2);
-    _ = try dll.remove_tail();
-    _ = try dll.remove_tail();
-    _ = try dll.remove_tail();
-    _ = try dll.remove_tail();
+    _ = try dll.remove_last();
+    _ = try dll.remove_last();
+    _ = try dll.remove_last();
+    _ = try dll.remove_last();
     try std.testing.expectEqual(@as(usize, 0), dll.size());
     dll.print();
 }

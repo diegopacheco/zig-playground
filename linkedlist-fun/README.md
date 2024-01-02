@@ -1,3 +1,28 @@
+### Run all Tests
+```bash
+zig test src/linkedlist.zig
+```
+
+### Run the Program
+```bash
+zig build run
+```
+
+### Double Linked list
+
+Supported Opperations
+```
+init         : Creates a Generic T DLL.
+deinit       : Destroy a DLL all links.
+add          : Add elements of type T to the DLL.
+get          : Get elements by index my throw ElementNotFound | EmptyList errors
+remove_first : Remove first element(head) of the DLL.
+remove_last  : Remove first element(tail) of the DLL.
+remove       : Remove by index.
+size         : Size of the DLL, 0 if empty.
+print        : Print all elements of the DLL.
+```
+
 ### Useful things in Zig
 
 1. How to unwrap some optional value? 
@@ -41,13 +66,3 @@ pub fn DoubleLinkedList(comptime T: type) type {
          // print
      }
 ``` 
-
-### Run all Tests
-```bash
-zig test src/linkedlist.zig
-```
-
-### Run the Program
-```bash
-zig build run
-```
