@@ -80,6 +80,14 @@ pub fn DoubleLinkedList(comptime T: type) type {
             return Errors.ElementNotFound;
         }
 
+        pub fn remove_first(self: *Self) !T {
+            return remove(self, 0);
+        }
+
+        pub fn remove_tail(self: *Self) !T {
+            return remove(self, self.count - 1);
+        }
+
         pub fn remove(self: *Self, index: usize) !T {
             if (self.count == 0) {
                 return Errors.EmptyList;
@@ -252,7 +260,7 @@ test "DLL.remove middle" {
     dll.print();
 }
 
-test "DLL.remove middle to all" {
+test "DLL.remove middle, first to all" {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     var alloc = gpa.allocator();
@@ -267,10 +275,33 @@ test "DLL.remove middle to all" {
     try std.testing.expectEqual(@as(usize, 5), dll.size());
 
     _ = try dll.remove(2);
-    _ = try dll.remove(0);
-    _ = try dll.remove(0);
-    _ = try dll.remove(0);
-    _ = try dll.remove(0);
+    _ = try dll.remove_first();
+    _ = try dll.remove_first();
+    _ = try dll.remove_first();
+    _ = try dll.remove_first();
+    try std.testing.expectEqual(@as(usize, 0), dll.size());
+    dll.print();
+}
+
+test "DLL.remove middle, tail to all" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var alloc = gpa.allocator();
+
+    var dll = try DoubleLinkedList(i32).init(alloc);
+    defer dll.deinit();
+    _ = try dll.add(1);
+    _ = try dll.add(2);
+    _ = try dll.add(3);
+    _ = try dll.add(4);
+    _ = try dll.add(5);
+    try std.testing.expectEqual(@as(usize, 5), dll.size());
+
+    _ = try dll.remove(2);
+    _ = try dll.remove_tail();
+    _ = try dll.remove_tail();
+    _ = try dll.remove_tail();
+    _ = try dll.remove_tail();
     try std.testing.expectEqual(@as(usize, 0), dll.size());
     dll.print();
 }
