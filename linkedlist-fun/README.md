@@ -66,3 +66,47 @@ pub fn DoubleLinkedList(comptime T: type) type {
          // print
      }
 ``` 
+
+### Tests Result Output
+```bash
+zig test src/linkedlist.zig
+```
+```
+Test [2/8] test.DLL.print... >>> DLL size is: 1
+>> element: [1]
+Test [4/8] test.DLL.remove tail... * Found index for removal
+* Removing tail
+>>> DLL size is: 4
+>> element: [1] >> element: [2] >> element: [3] >> element: [4]
+Test [5/8] test.DLL.remove head... * Found index for removal
+* Removing head
+>>> DLL size is: 4
+>> element: [2] >> element: [3] >> element: [4] >> element: [5]
+Test [6/8] test.DLL.remove middle... * Found index for removal
+* Removing in the middle of the list
+>>> DLL size is: 4
+>> element: [1] >> element: [2] >> element: [4] >> element: [5]
+Test [7/8] test.DLL.remove middle, first to all... * Found index for removal
+* Removing in the middle of the list
+* Found index for removal
+* Removing head
+* Found index for removal
+* Removing head
+* Found index for removal
+* Removing head
+* Found index for removal
+* Removing head
+>>> DLL size is: 0
+Test [8/8] test.DLL.remove middle, tail to all... * Found index for removal
+* Removing in the middle of the list
+* Found index for removal
+* Removing tail
+* Found index for removal
+* Removing tail
+* Found index for removal
+* Removing tail
+* Found index for removal
+* Removing head
+>>> DLL size is: 0
+All 8 tests passed.
+```
