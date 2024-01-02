@@ -70,6 +70,12 @@ pub fn DoubleLinkedList(comptime T: type) type {
          // print
      }
 ``` 
+6. How to catch an error? (there is no try - just catch)
+```Rust
+    _ = dll.get(100) catch |err| {
+        print("Element not found {any} \n", .{err});
+    };
+```
 
 ### Learning from Errors
 ```
@@ -93,6 +99,47 @@ Right:
         const Self = @This();
     };
 ```
+```
+ error: no field named 'next' in struct 'linkedlist.DoubleLinkedList.Node'
+```
+Wrong
+```Rust
+    const Node = struct {
+        value: T,
+        prev: ?*Self,
+        var next: ?*Self = null;
+        const Self = @This();
+    };
+```
+Right:
+```Rust
+    const Node = struct {
+        value: T,
+        next: ?*Self,
+        prev: ?*Self,
+        const Self = @This();
+    };
+```
+This is by language design, Zig does not support private fields in strucs <BR/>
+https://www.reddit.com/r/Zig/comments/13v6q2z/struct_fields_are_always_public_by_design/
+
+```
+error: cannot assign to constant
+```
+Wrong:
+```Rust
+pub fn add(self: Self, value: T) !bool {
+     // ... rest of the code
+}
+```
+Right:
+```Rust
+pub fn add(self: *Self, value: T) !bool {
+     // ... rest of the code
+}
+```
+Zig param arguments are immutable by default <BR/> somethimes you will see implicit `const`
+https://stackoverflow.com/questions/74021886/how-do-i-mutate-a-zig-function-argument
 
 ### Tests Result Output
 ```bash
