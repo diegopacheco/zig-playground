@@ -16,7 +16,7 @@ pub fn Queue(comptime T: type) type {
 
     return struct {
         allocator: Allocator,
-        size: usize,
+        count: usize,
         head: ?*Node,
         tail: ?*Node,
         const Self = @This();
@@ -24,7 +24,7 @@ pub fn Queue(comptime T: type) type {
         pub fn init(allocator: Allocator) Self {
             return .{
                 .allocator = allocator,
-                .size = 0,
+                .count = 0,
                 .head = null,
                 .tail = null,
             };
@@ -50,7 +50,7 @@ pub fn Queue(comptime T: type) type {
                 self.head = newNode;
             }
             self.tail = newNode;
-            self.size += 1;
+            self.count += 1;
             return value;
         }
 
@@ -74,8 +74,8 @@ pub fn Queue(comptime T: type) type {
                         self.tail = prev;
                         self.allocator.destroy(temp);
 
-                        self.size -= 1;
-                        if (self.size == 0) {
+                        self.count -= 1;
+                        if (self.count == 0) {
                             self.head = null;
                             self.tail = null;
                         }
@@ -88,11 +88,11 @@ pub fn Queue(comptime T: type) type {
         }
 
         pub fn size(self: *Self) usize {
-            return self.size;
+            return self.count;
         }
 
         pub fn print(self: *Self) void {
-            dprint(">>> Queue size is {d}\n", .{self.size});
+            dprint(">>> Queue size is {d}\n", .{self.size()});
             var has_elem = false;
             if (self.head) |safe_head| {
                 dprint(">>> Queue head: [{d}] - tail: [{d}] - elements: \n", .{ safe_head.value, self.tail.?.value });
@@ -107,4 +107,19 @@ pub fn Queue(comptime T: type) type {
             }
         }
     };
+}
+
+test "Queue.add" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var allocator = gpa.allocator();
+    const IntQueue = Queue(i32);
+    var iq = IntQueue.init(allocator);
+    defer _ = iq.deinit();
+
+    _ = try iq.add(1);
+    _ = try iq.add(2);
+    _ = try iq.add(3);
+    try std.testing.expectEqual(@as(usize, 3), iq.size());
 }
