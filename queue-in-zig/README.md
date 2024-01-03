@@ -29,6 +29,29 @@ Test [3/6] test.Queue.print... >>> Queue size is 3
 All 6 tests passed.
 ```
 
+### Learning some Zig from errors
+
+```
+error: function with comptime-only return type 'type' requires all parameters to be comptime
+```
+Wrong:
+```Rust
+    pub fn init(allocator: Allocator) type {
+        return .{
+            // rest of the code
+        };
+    }
+```
+Right:
+```Rust
+    pub fn init(allocator: Allocator) !Self {
+        return .{
+            // rest of the code
+        };
+    }
+```
+
+
 ### Run the program
 ```bash
 zig build run
