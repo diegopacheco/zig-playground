@@ -123,6 +123,17 @@ test "Queue.add" {
     try std.testing.expectEqual(@as(usize, 3), iq.size());
 }
 
+test "Queue.size" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var allocator = gpa.allocator();
+    const IntQueue = Queue(i32);
+    var iq = IntQueue.init(allocator);
+    defer _ = iq.deinit();
+    try std.testing.expectEqual(@as(usize, 0), iq.size());
+}
+
 test "Queue.print" {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();

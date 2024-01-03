@@ -23,10 +23,10 @@ zig test src/queue.zig
 ```
 ```
 ❯ zig test src/queue.zig
-Test [2/5] test.Queue.print... >>> Queue size is 3
+Test [3/6] test.Queue.print... >>> Queue size is 3
 >>> Queue head: [1] - tail: [3] - elements:
 [1] [2] [3]
-All 5 tests passed.
+All 6 tests passed.
 ```
 
 ### Run the program
