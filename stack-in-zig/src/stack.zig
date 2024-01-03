@@ -115,6 +115,16 @@ test "stack.size" {
     try std.testing.expectEqual(@as(usize, 0), stack.size());
 }
 
+test "stack.print" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try Stack(i32).init(allocator);
+    defer stack.deinit();
+    stack.print();
+}
+
 test "stack.push and stack.pop" {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
