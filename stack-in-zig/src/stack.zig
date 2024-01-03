@@ -26,8 +26,11 @@ pub fn Stack(comptime T: type) type {
         }
 
         pub fn deinit(self: *Self) void {
-            if (self.tail) |n| {
-                self.allocator.destroy(n);
+            var current: ?*Node = self.tail;
+            while (current) |c| {
+                var temp = c;
+                current = c.prev;
+                self.allocator.destroy(temp);
             }
         }
 
@@ -81,7 +84,7 @@ pub fn Stack(comptime T: type) type {
         //
         pub fn poll(self: *Self) ?T {
             if (self.tail) |t| {
-                return t;
+                return t.value;
             }
             return null;
         }
@@ -100,4 +103,72 @@ pub fn Stack(comptime T: type) type {
             std.debug.print("\n", .{});
         }
     };
+}
+
+test "stack.size" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try Stack(i32).init(allocator);
+    defer stack.deinit();
+    try std.testing.expectEqual(@as(usize, 0), stack.size());
+}
+
+test "stack.push and stack.pop" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try Stack(i32).init(allocator);
+    defer stack.deinit();
+
+    _ = try stack.push(1);
+    _ = try stack.push(2);
+    _ = try stack.push(3);
+
+    try std.testing.expectEqual(@as(usize, 3), stack.size());
+
+    _ = try stack.pop();
+    _ = try stack.pop();
+    _ = try stack.pop();
+
+    try std.testing.expectEqual(@as(usize, 0), stack.size());
+}
+
+test "stack.poll" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try Stack(i32).init(allocator);
+    defer stack.deinit();
+
+    _ = try stack.push(1);
+    _ = try stack.push(2);
+    _ = try stack.push(3);
+
+    try std.testing.expectEqual(@as(usize, 3), stack.size());
+
+    _ = try stack.pop();
+    var r = stack.poll();
+    try std.testing.expectEqual(@as(i32, 2), r.?);
+    _ = try stack.pop();
+    _ = try stack.pop();
+
+    try std.testing.expectEqual(@as(usize, 0), stack.size());
+}
+
+test "stack.deinit" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var stack = try Stack(i32).init(allocator);
+    defer stack.deinit();
+
+    _ = try stack.push(1);
+    _ = try stack.push(2);
+    _ = try stack.push(3);
+    try std.testing.expectEqual(@as(usize, 3), stack.size());
 }
