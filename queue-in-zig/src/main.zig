@@ -17,6 +17,9 @@ pub fn main() !void {
     _ = try iq.add(3);
     iq.print();
 
+    var head_val = try iq.peek();
+    print("Head val is {d} \n", .{head_val});
+
     _ = try iq.poll();
     iq.print();
 

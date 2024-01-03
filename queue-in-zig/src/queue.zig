@@ -54,6 +54,13 @@ pub fn Queue(comptime T: type) type {
             return value;
         }
 
+        pub fn peek(self: *Self) !T {
+            if (self.head) |safe_head| {
+                return safe_head.value;
+            }
+            return Errors.QueueIsEmptyError;
+        }
+
         pub fn poll(self: *Self) !T {
             if (self.tail) |safe_tail| {
                 var current: ?*Node = self.head;
