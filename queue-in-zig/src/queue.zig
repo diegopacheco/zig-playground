@@ -156,3 +156,21 @@ test "Queue.peek" {
     var head_val = try iq.peek();
     try std.testing.expectEqual(@as(i32, 1), head_val);
 }
+
+test "Queue.poll" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var allocator = gpa.allocator();
+    const IntQueue = Queue(i32);
+    var iq = IntQueue.init(allocator);
+    defer _ = iq.deinit();
+
+    _ = try iq.add(1);
+    _ = try iq.add(3);
+    try std.testing.expectEqual(@as(usize, 2), iq.size());
+
+    _ = try iq.poll();
+    _ = try iq.poll();
+    try std.testing.expectEqual(@as(usize, 0), iq.size());
+}
