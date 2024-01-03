@@ -22,6 +22,10 @@ print            : Print all elements of the stack, return void.
 zig test src/stack.zig
 ```
 ```
+❯ zig test src/stack.zig
+Test [2/5] test.stack.print... Stack size: 0
+
+All 5 tests passed.
 ```
 
 ### Run the Program 
