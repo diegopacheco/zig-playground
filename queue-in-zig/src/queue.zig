@@ -2,12 +2,12 @@ const std = @import("std");
 const dprint = std.debug.print;
 const Allocator = std.mem.Allocator;
 
-pub fn Queue(comptime T: type) type {
-    const Errors = error{
-        ElementNotFoundError,
-        QueueIsEmptyError,
-    };
+const Errors = error{
+    ElementNotFoundError,
+    QueueIsEmptyError,
+};
 
+pub fn Queue(comptime T: type) type {
     const Node = struct {
         value: T,
         next: ?*Self,
@@ -173,4 +173,24 @@ test "Queue.poll" {
     _ = try iq.poll();
     _ = try iq.poll();
     try std.testing.expectEqual(@as(usize, 0), iq.size());
+}
+
+test "Queue.poll error.QueueIsEmptyError" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var allocator = gpa.allocator();
+    const IntQueue = Queue(i32);
+    var iq = IntQueue.init(allocator);
+    defer _ = iq.deinit();
+
+    _ = try iq.add(1);
+    _ = try iq.add(3);
+    try std.testing.expectEqual(@as(usize, 2), iq.size());
+
+    _ = try iq.poll();
+    _ = try iq.poll();
+    _ = iq.poll() catch |err| {
+        try std.testing.expectError(Errors.QueueIsEmptyError, err);
+    };
 }
