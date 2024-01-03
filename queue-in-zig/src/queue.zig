@@ -3,7 +3,6 @@ const dprint = std.debug.print;
 const Allocator = std.mem.Allocator;
 
 const Errors = error{
-    ElementNotFoundError,
     QueueIsEmptyError,
 };
 
@@ -190,7 +189,6 @@ test "Queue.poll error.QueueIsEmptyError" {
 
     _ = try iq.poll();
     _ = try iq.poll();
-    _ = iq.poll() catch |err| {
-        try std.testing.expectError(Errors.QueueIsEmptyError, err);
-    };
+    var err = iq.poll();
+    try std.testing.expectError(Errors.QueueIsEmptyError, err);
 }
