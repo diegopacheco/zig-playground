@@ -58,6 +58,7 @@ pub fn Queue(comptime T: type) type {
             if (self.tail) |safe_tail| {
                 var current: ?*Node = self.head;
                 var prev: ?*Node = self.head;
+
                 while (current) |curr| : (current = curr.next) {
                     if (curr == safe_tail) {
                         var temp: *Node = safe_tail;
@@ -65,6 +66,12 @@ pub fn Queue(comptime T: type) type {
                         prev.?.next = null;
                         self.tail = prev;
                         self.allocator.destroy(temp);
+
+                        self.size -= 1;
+                        if (self.size == 0) {
+                            self.head = null;
+                            self.tail = null;
+                        }
                         return result;
                     }
                     prev = curr;
