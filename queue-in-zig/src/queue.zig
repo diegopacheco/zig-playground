@@ -123,3 +123,36 @@ test "Queue.add" {
     _ = try iq.add(3);
     try std.testing.expectEqual(@as(usize, 3), iq.size());
 }
+
+test "Queue.print" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var allocator = gpa.allocator();
+    const IntQueue = Queue(i32);
+    var iq = IntQueue.init(allocator);
+    defer _ = iq.deinit();
+
+    _ = try iq.add(1);
+    _ = try iq.add(2);
+    _ = try iq.add(3);
+    try std.testing.expectEqual(@as(usize, 3), iq.size());
+    iq.print();
+}
+
+test "Queue.peek" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+
+    var allocator = gpa.allocator();
+    const IntQueue = Queue(i32);
+    var iq = IntQueue.init(allocator);
+    defer _ = iq.deinit();
+
+    _ = try iq.add(1);
+    _ = try iq.add(3);
+    try std.testing.expectEqual(@as(usize, 2), iq.size());
+
+    var head_val = try iq.peek();
+    try std.testing.expectEqual(@as(i32, 1), head_val);
+}
