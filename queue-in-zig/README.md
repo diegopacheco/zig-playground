@@ -96,6 +96,20 @@ Right:
     }
 ```
 
+How to test for errors?
+```Rust
+const Errors = error{
+  QueueIsEmptyError,
+};  
+// rest of the code
+
+test "Queue.poll error.QueueIsEmptyError" {    
+  // rest of the code  
+  var err = iq.poll();
+  try std.testing.expectError(Errors.QueueIsEmptyError, err);
+}
+```
+
 ### Run the program
 ```bash
 zig build run
