@@ -50,6 +50,8 @@ Right:
         };
     }
 ```
+<BR/>
+<BR/>
 
 ```
  error: expected type '*mem.Allocator', found 'mem.Allocator'
@@ -70,7 +72,29 @@ Right:
         };
     }
 ```
+<BR/>
+<BR/>
 
+```
+error: expected 2 argument(s), found 1
+```
+Wrong:
+```Rust
+    pub fn init(self: *Self, allocator: Allocator) Self {
+        _ = self;
+        return .{
+            // rest of the code
+        };
+    }
+```
+Right:
+```Rust
+    pub fn init(allocator: Allocator) Self {
+        return .{
+            // rest of the code
+        };
+    }
+```
 
 ### Run the program
 ```bash

@@ -20,7 +20,8 @@ pub fn Queue(comptime T: type) type {
         tail: ?*Node,
         const Self = @This();
 
-        pub fn init(allocator: Allocator) Self {
+        pub fn init(self: *Self, allocator: Allocator) Self {
+            _ = self;
             return .{
                 .allocator = allocator,
                 .count = 0,
