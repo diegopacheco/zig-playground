@@ -20,11 +20,7 @@ pub fn BinaryTree(comptime T: type) type {
         }
 
         pub fn addLeft(self: *Self, value: T) !void {
-            var newNode: *Self = try self.allocator.create(Self);
-            newNode.allocator = self.allocator;
-            newNode.leftNode = null;
-            newNode.rightNode = null;
-            newNode.data = value;
+            var newNode: Self = init(self.allocator, value);
             self.leftNode = newNode;
         }
 
