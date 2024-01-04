@@ -21,6 +21,7 @@ Node
 ```
 init                : Creates a tree node comptime generic type of T.
 deinit              : Destroy tree nodes, left and right.
+newNode             : Generic function to create a node with a data type T.
 addLeft             : Add value and node to the left side of the tree.
 addRight            : Add value and node to the right side of the tree.
 getLeft             : Get the Node on the Left side of the tree.
