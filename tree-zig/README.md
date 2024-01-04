@@ -9,6 +9,15 @@ Zig Version
 ```
 
 ### Supported Operations
+
+BinaryTree
+```
+init                : Creates a BinaryTree comptime generic type of T.
+deinit              : Destroy tree nodes, left and right.
+print               : Print in-order the whole tree. 
+```
+
+Node
 ```
 init                : Creates a tree node comptime generic type of T.
 deinit              : Destroy tree nodes, left and right.
