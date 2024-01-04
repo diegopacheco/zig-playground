@@ -19,18 +19,27 @@ pub fn BinaryTree(comptime T: type) type {
             };
         }
 
+        fn newNode(self: *Self, value: T) !*Self {
+            var new_node: *Self = try self.allocator.create(Self);
+            new_node.allocator = self.allocator;
+            new_node.leftNode = null;
+            new_node.rightNode = null;
+            new_node.data = value;
+            return new_node;
+        }
+
         pub fn addLeft(self: *Self, value: T) !void {
-            var newNode: Self = init(self.allocator, value);
-            self.leftNode = newNode;
+            var new_node: ?*Self = try newNode(self, value);
+            self.leftNode = new_node;
         }
 
         pub fn addRight(self: *Self, value: T) !void {
-            var newNode: *Self = try self.allocator.create(Self);
-            newNode.allocator = self.allocator;
-            newNode.leftNode = null;
-            newNode.rightNode = null;
-            newNode.data = value;
-            self.rightNode = newNode;
+            var new_node: *Self = try self.allocator.create(Self);
+            new_node.allocator = self.allocator;
+            new_node.leftNode = null;
+            new_node.rightNode = null;
+            new_node.data = value;
+            self.rightNode = new_node;
         }
 
         pub fn getLeft(self: *Self) ?*Self {
