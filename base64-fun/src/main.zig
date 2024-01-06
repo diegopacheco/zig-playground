@@ -15,7 +15,7 @@ const Person = struct {
 };
 
 pub fn main() !void {
-    var jd = Person.init(1, "John", "john@doe.com");
+    var jd = Person.init(1, "john", "john@doe.com");
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
     var buf: [0x100]u8 = undefined;
@@ -23,7 +23,7 @@ pub fn main() !void {
     print("Base64 {s}\n", .{buf});
 
     var buffer: [0x100]u8 = undefined;
-    const decoded = buffer[0..try decoder.calcSizeForSlice(&buf)];
+    const decoded = buffer[0..try decoder.calcSizeForSlice(jd.name)];
     try decoder.decode(decoded, &buf);
     print("Decoded {s}\n", .{decoded});
 }
