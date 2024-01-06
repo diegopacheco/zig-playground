@@ -4,13 +4,13 @@ const ArrayList = std.ArrayList;
 const Codecs = std.base64.standard;
 
 const Person = struct {
-    id: u8,
+    id: i16,
     name: []const u8,
     mail: []const u8,
     allocator: std.mem.Allocator,
     const Self = @This();
 
-    pub fn init(allocator: std.mem.Allocator, id: u8, name: []const u8, mail: []const u8) Self {
+    pub fn init(allocator: std.mem.Allocator, id: i16, name: []const u8, mail: []const u8) Self {
         return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
     }
 
@@ -18,7 +18,7 @@ const Person = struct {
         var list = ArrayList(u8).init(self.allocator);
         defer list.deinit();
 
-        try list.append(self.id);
+        try list.append(self.id & 0xFF);
         try list.append(',');
         try list.appendSlice(self.name);
         try list.append(',');
