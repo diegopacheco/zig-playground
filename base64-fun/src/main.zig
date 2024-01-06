@@ -60,8 +60,8 @@ pub fn main() !void {
     var enc = try jd.to_encoded();
     print("got encoded {s}\n", .{enc});
 
-    var back = try jd.to_decoded(enc);
-    print("back baby = {s}\n", .{back});
+    //var back = try jd.to_decoded(enc, enc.len);
+    //print("back baby = {s}\n", .{back});
 
     //
     //  Base64 encode
