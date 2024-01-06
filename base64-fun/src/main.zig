@@ -18,12 +18,11 @@ pub fn main() !void {
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
     var buf: []u8 = undefined;
-    _ = Codecs.Encoder.encode(buf, jd.name);
+    var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
     var buffer: []u8 = undefined;
-    //var decoded = buffer[0 .. try Codecs.Decoder.calcSizeForSlice(jd.name) + 1];
-    _ = try Codecs.Decoder.decode(buffer, &buf);
+    _ = try Codecs.Decoder.decode(buffer, result);
     print("Decoded {s}\n", .{buffer});
 }
 
