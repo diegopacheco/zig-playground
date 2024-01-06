@@ -25,7 +25,7 @@ pub fn main() !void {
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
-    var buffer: []u8 = undefined;
+    var buffer: []u8 = try allocator.alloc(u8, 10);
     _ = try Codecs.Decoder.decode(buffer, result);
     print("Decoded {s}\n", .{buffer});
 }
