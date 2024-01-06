@@ -14,7 +14,7 @@ const Person = struct {
         return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
     }
 
-    pub fn to_u8_array(self: *Self) ArrayList {
+    pub fn to_u8_array(self: *Self) []u8 {
         var list = ArrayList(u8).init(self.allocator);
         defer list.deinit();
 
@@ -22,7 +22,7 @@ const Person = struct {
         try list.append(self.name);
         try list.append(self.mail);
 
-        return list;
+        return list.toOwnedSlice();
     }
 };
 
@@ -33,6 +33,9 @@ pub fn main() !void {
 
     var jd = Person.init(allocator, 1, "john", "john@doe.com");
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
+
+    var list = jd.to_u8_array();
+    print("{any}\n", .{list});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
