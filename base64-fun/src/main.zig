@@ -27,14 +27,14 @@ const Person = struct {
         return list.toOwnedSlice();
     }
 
-    pub fn to_encoded(self: *Self) ![]const u8 {
+    pub fn to_encoded(self: *Self) ![]u8 {
         var buf: []u8 = try self.allocator.alloc(u8, 28);
         var slice = try self.to_slice();
         var result: []const u8 = Codecs.Encoder.encode(buf, slice);
 
         defer self.allocator.free(slice);
         defer self.allocator.free(result);
-        return result;
+        return buf;
     }
 
     pub fn to_decoded(self: *Self, buf: []u8, source: []const u8) !void {
@@ -52,28 +52,28 @@ pub fn main() !void {
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
     var list = try jd.to_slice();
-    print("look what I got == {s}\n", .{list});
+    print("look what I got == [{s}]\n", .{list});
 
     var enc = try jd.to_encoded();
-    print("got encoded {s}\n", .{enc});
+    print("got encoded [{s}]\n", .{enc});
 
     var bb: []u8 = try allocator.alloc(u8, 28);
-    try jd.to_decoded(bb, enc);
-    print("back baby = {s}\n", .{bb});
+    //try jd.to_decoded(bb, enc);
+    //print("back baby = {s}\n", .{bb});
 
     //
     //  Base64 encode
     //
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
-    print("Base64 {s}\n", .{buf});
+    print("Base64 [{s}]\n", .{buf});
 
     //
     // Base64 decode
     //
     var buffer: []u8 = try allocator.alloc(u8, 10);
     _ = try Codecs.Decoder.decode(buffer, result);
-    print("Decoded {s}\n", .{buffer});
+    print("Decoded [{s}]\n", .{buffer});
 
     //
     // Client side free memory
@@ -82,6 +82,7 @@ pub fn main() !void {
     allocator.free(buffer);
     allocator.free(list);
     allocator.free(bb);
+    //allocator.free(enc);
 }
 
 test "simple test" {
