@@ -23,7 +23,7 @@ pub fn main() !void {
     print("Base64 {s}\n", .{buf});
 
     var buffer: [0x100]u8 = undefined;
-    const decoded = buffer[0..try decoder.calcSizeForSlice(jd.name)];
+    const decoded = buffer[0 .. try decoder.calcSizeForSlice(jd.name) + 1];
     try decoder.decode(decoded, &buf);
     print("Decoded {s}\n", .{decoded});
 }
