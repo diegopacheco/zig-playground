@@ -1,7 +1,7 @@
 const std = @import("std");
 const print = std.debug.print;
-const encoder = std.base64.url_safe_no_pad.Encoder;
-const decoder = std.base64.url_safe_no_pad.Decoder;
+const encoder = std.base64.url_safe.Encoder;
+const decoder = std.base64.url_safe.Decoder;
 
 const Person = struct {
     id: usize,
@@ -22,8 +22,9 @@ pub fn main() !void {
     _ = encoder.encode(&buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
-    const decoded = buf[0..try decoder.calcSizeForSlice(&buf)];
-    _ = try decoder.decode(decoded, &buf);
+    var buffer: [0x100]u8 = undefined;
+    const decoded = buffer[0..try decoder.calcSizeForSlice(&buf)];
+    try decoder.decode(decoded, &buf);
     print("Decoded {s}\n", .{decoded});
 }
 
