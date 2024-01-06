@@ -1,6 +1,6 @@
 const std = @import("std");
 const print = std.debug.print;
-const Codecs = std.base64.standard_no_pad;
+const Codecs = std.base64.standard;
 
 const Person = struct {
     id: usize,
