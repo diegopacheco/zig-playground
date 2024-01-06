@@ -29,7 +29,7 @@ const Person = struct {
 
     pub fn to_encoded(self: *Self) ![]u8 {
         var buf: []u8 = try self.allocator.alloc(u8, 100);
-        var result: []u8 = Codecs.Encoder.encode(buf, try self.to_slice());
+        var result: []const u8 = Codecs.Encoder.encode(buf, try self.to_slice());
         return result;
     }
 };
