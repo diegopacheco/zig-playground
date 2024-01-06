@@ -60,7 +60,7 @@ pub fn main() !void {
     allocator.free(buf);
     allocator.free(buffer);
     allocator.free(list);
-    allocator.free(enc);
+    //allocator.free(enc);
 }
 
 test "simple test" {
