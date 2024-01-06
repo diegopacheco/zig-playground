@@ -4,21 +4,22 @@ const ArrayList = std.ArrayList;
 const Codecs = std.base64.standard;
 
 const Person = struct {
-    id: i16,
+    id: i32,
     name: []const u8,
     mail: []const u8,
     allocator: std.mem.Allocator,
     const Self = @This();
 
-    pub fn init(allocator: std.mem.Allocator, id: i16, name: []const u8, mail: []const u8) Self {
+    pub fn init(allocator: std.mem.Allocator, id: i32, name: []const u8, mail: []const u8) Self {
         return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
     }
 
-    pub fn to_u8_array(self: *Self) ![]const u8 {
+    pub fn to_slice(self: *Self) ![]const u8 {
         var list = ArrayList(u8).init(self.allocator);
         defer list.deinit();
 
-        try list.append(self.id & 0xFF);
+        var id_u8: u8 = self.id[0..];
+        try list.append(id_u8);
         try list.append(',');
         try list.appendSlice(self.name);
         try list.append(',');
@@ -36,7 +37,7 @@ pub fn main() !void {
     var jd = Person.init(allocator, 1, "john", "john@doe.com");
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
-    var list = try jd.to_u8_array();
+    var list = try jd.to_slice();
     print("look what I got == {s}\n", .{list});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
