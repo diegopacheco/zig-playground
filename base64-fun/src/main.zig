@@ -1,15 +1,28 @@
 const std = @import("std");
 const print = std.debug.print;
+const ArrayList = std.ArrayList;
 const Codecs = std.base64.standard;
 
 const Person = struct {
     id: usize,
     name: []const u8,
     mail: []const u8,
+    allocator: std.mem.Allocator,
     const Self = @This();
 
-    pub fn init(id: usize, name: []const u8, mail: []const u8) Self {
-        return .{ .id = id, .name = name, .mail = mail };
+    pub fn init(allocator: std.mem.Allocator, id: usize, name: []const u8, mail: []const u8) Self {
+        return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
+    }
+
+    pub fn to_u8_array(self: *Self) ArrayList {
+        var list = ArrayList(u8).init(self.allocator);
+        defer list.deinit();
+
+        try list.append(self.id);
+        try list.append(self.name);
+        try list.append(self.mail);
+
+        return list;
     }
 };
 
@@ -18,7 +31,7 @@ pub fn main() !void {
     defer _ = gpa.deinit();
     var allocator = gpa.allocator();
 
-    var jd = Person.init(1, "john", "john@doe.com");
+    var jd = Person.init(allocator, 1, "john", "john@doe.com");
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
     var buf: []u8 = try allocator.alloc(u8, 10);
