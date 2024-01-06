@@ -23,7 +23,7 @@ pub fn main() !void {
     print("Base64 {s}\n", .{buf});
 
     var dest: [0x100]u8 = undefined;
-    _ = decoder.decode(&dest, buf);
+    _ = try decoder.decode(dest[0..], &buf);
     print("Decoded {s}\n", .{dest});
 }
 
