@@ -29,7 +29,12 @@ const Person = struct {
 
     pub fn to_encoded(self: *Self) ![]const u8 {
         var buf: []u8 = try self.allocator.alloc(u8, 28);
-        var result: []const u8 = Codecs.Encoder.encode(buf, try self.to_slice());
+        var slice = try self.to_slice();
+        var result: []const u8 = Codecs.Encoder.encode(buf, slice);
+
+        defer self.allocator.free(slice);
+        defer self.allocator.free(result);
+
         return result;
     }
 };
@@ -44,8 +49,8 @@ pub fn main() !void {
 
     var list = try jd.to_slice();
     print("look what I got == {s}\n", .{list});
-    //var enc = try jd.to_encoded();
-    //print("got encoded {s}\n", .{enc});
+    var enc = try jd.to_encoded();
+    print("got encoded {s}\n", .{enc});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
