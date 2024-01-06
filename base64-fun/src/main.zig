@@ -17,13 +17,13 @@ pub fn main() !void {
     var jd = Person.init(1, "john", "john@doe.com");
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
-    var buf: []const u8 = undefined;
-    _ = Codecs.Encoder.encode(buf[0..Codecs.Encoder.calcSize(jd.name.len)], jd.name);
+    var buf: []u8 = undefined;
+    _ = Codecs.Encoder.encode(buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
-    var buffer: []const u8 = undefined;
+    var buffer: []u8 = undefined;
     //var decoded = buffer[0 .. try Codecs.Decoder.calcSizeForSlice(jd.name) + 1];
-    _ = try Codecs.Decoder.decode(&buffer, &buf);
+    _ = try Codecs.Decoder.decode(buffer, &buf);
     print("Decoded {s}\n", .{buffer});
 }
 
