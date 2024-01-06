@@ -56,17 +56,30 @@ pub fn main() !void {
 
     var list = try jd.to_slice();
     print("look what I got == {s}\n", .{list});
+
     var enc = try jd.to_encoded();
     print("got encoded {s}\n", .{enc});
 
+    var back = try jd.to_decoded(enc);
+    print("back baby = {s}\n", .{back});
+
+    //
+    //  Base64 encode
+    //
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
+    //
+    // Base64 decode
+    //
     var buffer: []u8 = try allocator.alloc(u8, 10);
     _ = try Codecs.Decoder.decode(buffer, result);
     print("Decoded {s}\n", .{buffer});
 
+    //
+    // Client side free memory
+    //
     allocator.free(buf);
     allocator.free(buffer);
     allocator.free(list);
