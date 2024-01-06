@@ -22,8 +22,8 @@ pub fn main() !void {
     _ = encoder.encode(&buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
-    var dest: [0x100]u8 = undefined;
-    _ = try decoder.decode(dest[0..], &buf);
+    const decoded = buf[0..try decoder.calcSizeForSlice(buf)];
+    _ = try decoder.decode(decoded, &buf);
     print("Decoded {s}\n", .{dest});
 }
 
