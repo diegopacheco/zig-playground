@@ -34,8 +34,15 @@ const Person = struct {
 
         defer self.allocator.free(slice);
         defer self.allocator.free(result);
-
         return result;
+    }
+
+    pub fn to_decoded(self: *Self, source: []const u8, size: usize) ![]u8 {
+        var buf: []u8 = try self.allocator.alloc(u8, size);
+        _ = Codecs.Encoder.encode(buf, source);
+        defer self.allocator.free(buf);
+
+        return buf;
     }
 };
 
@@ -63,7 +70,6 @@ pub fn main() !void {
     allocator.free(buf);
     allocator.free(buffer);
     allocator.free(list);
-    //allocator.free(enc);
 }
 
 test "simple test" {
