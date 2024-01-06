@@ -22,9 +22,9 @@ pub fn main() !void {
     _ = encoder.encode(&buf, jd.name);
     print("Base64 {s}\n", .{buf});
 
-    const decoded = buf[0..try decoder.calcSizeForSlice(buf)];
+    const decoded = buf[0..try decoder.calcSizeForSlice(&buf)];
     _ = try decoder.decode(decoded, &buf);
-    print("Decoded {s}\n", .{dest});
+    print("Decoded {s}\n", .{decoded});
 }
 
 test "simple test" {
