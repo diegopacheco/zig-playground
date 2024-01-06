@@ -1,7 +1,7 @@
 const std = @import("std");
 const print = std.debug.print;
-const encoder = std.base64.url_safe.Encoder;
-const decoder = std.base64.url_safe.Decoder;
+const encoder = std.base64.url_safe_no_pad.Encoder;
+const decoder = std.base64.url_safe_no_pad.Decoder;
 
 const Person = struct {
     id: usize,
