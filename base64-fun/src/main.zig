@@ -1,6 +1,7 @@
 const std = @import("std");
 const print = std.debug.print;
 const encoder = std.base64.standard.Encoder;
+const decoder = std.base64.standard.Decoder;
 
 const Person = struct {
     id: usize,
@@ -20,6 +21,10 @@ pub fn main() !void {
     var buf: [0x100]u8 = undefined;
     _ = encoder.encode(&buf, jd.name);
     print("Base64 {s}\n", .{buf});
+
+    var dest: [0x100]u8 = undefined;
+    _ = decoder.decode(&dest, buf);
+    print("Decoded {s}\n", .{dest});
 }
 
 test "simple test" {
