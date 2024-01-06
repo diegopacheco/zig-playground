@@ -10,17 +10,17 @@ const Person = struct {
     allocator: std.mem.Allocator,
     const Self = @This();
 
-    pub fn init(allocator: std.mem.Allocator, id: usize, name: []const u8, mail: []const u8) Self {
+    pub fn init(allocator: std.mem.Allocator, id: u8, name: []const u8, mail: []const u8) Self {
         return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
     }
 
-    pub fn to_u8_array(self: *Self) []u8 {
+    pub fn to_u8_array(self: *Self) ![]const u8 {
         var list = ArrayList(u8).init(self.allocator);
         defer list.deinit();
 
         try list.append(self.id);
-        try list.append(self.name);
-        try list.append(self.mail);
+        try list.appendSlice(self.name);
+        try list.appendSlice(self.mail);
 
         return list.toOwnedSlice();
     }
@@ -34,8 +34,8 @@ pub fn main() !void {
     var jd = Person.init(allocator, 1, "john", "john@doe.com");
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
-    var list = jd.to_u8_array();
-    print("{any}\n", .{list});
+    var list = try jd.to_u8_array();
+    print("{s}\n", .{list});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
@@ -47,6 +47,7 @@ pub fn main() !void {
 
     allocator.free(buf);
     allocator.free(buffer);
+    allocator.free(list);
 }
 
 test "simple test" {
