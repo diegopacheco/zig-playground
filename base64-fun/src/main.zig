@@ -37,10 +37,9 @@ const Person = struct {
         return result;
     }
 
-    pub fn to_decoded(self: *Self, buf: []u8, source: []const u8) ![]const u8 {
+    pub fn to_decoded(self: *Self, buf: []u8, source: []const u8) !void {
         _ = self;
-        var result: []const u8 = Codecs.Encoder.encode(buf, source);
-        return result;
+        _ = try Codecs.Decoder.decode(buf, source);
     }
 };
 
@@ -59,8 +58,8 @@ pub fn main() !void {
     print("got encoded {s}\n", .{enc});
 
     var bb: []u8 = try allocator.alloc(u8, 28);
-    var back = try jd.to_decoded(enc, bb);
-    print("back baby = {s}\n", .{back});
+    try jd.to_decoded(bb, enc);
+    print("back baby = {s}\n", .{bb});
 
     //
     //  Base64 encode
@@ -82,6 +81,7 @@ pub fn main() !void {
     allocator.free(buf);
     allocator.free(buffer);
     allocator.free(list);
+    allocator.free(bb);
 }
 
 test "simple test" {
