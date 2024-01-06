@@ -29,8 +29,8 @@ pub fn main() !void {
     _ = try Codecs.Decoder.decode(buffer, result);
     print("Decoded {s}\n", .{buffer});
 
-    allocator.destroy(buf);
-    allocator.destroy(buffer);
+    allocator.destroy(*buf);
+    allocator.destroy(*buffer);
 }
 
 test "simple test" {
