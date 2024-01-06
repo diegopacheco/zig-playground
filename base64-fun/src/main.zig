@@ -4,7 +4,7 @@ const ArrayList = std.ArrayList;
 const Codecs = std.base64.standard;
 
 const Person = struct {
-    id: usize,
+    id: u8,
     name: []const u8,
     mail: []const u8,
     allocator: std.mem.Allocator,
