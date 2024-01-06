@@ -14,7 +14,7 @@ const Person = struct {
         return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
     }
 
-    pub fn to_slice(self: *Self) ![]const u8 {
+    pub fn to_slice(self: *Self) ![]u8 {
         var list = ArrayList(u8).init(self.allocator);
         defer list.deinit();
 
@@ -25,6 +25,12 @@ const Person = struct {
         try list.appendSlice(self.mail);
 
         return list.toOwnedSlice();
+    }
+
+    pub fn to_encoded(self: *Self) ![]u8 {
+        var buf: []u8 = try self.allocator.alloc(u8, 100);
+        var result: []u8 = Codecs.Encoder.encode(buf, self.to_slice);
+        return result;
     }
 };
 
@@ -38,6 +44,8 @@ pub fn main() !void {
 
     var list = try jd.to_slice();
     print("look what I got == {s}\n", .{list});
+    var enc = try jd.to_encoded();
+    print("got encoded {s}\n", .{enc});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
