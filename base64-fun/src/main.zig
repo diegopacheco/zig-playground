@@ -44,8 +44,8 @@ pub fn main() !void {
 
     var list = try jd.to_slice();
     print("look what I got == {s}\n", .{list});
-    var enc = try jd.to_encoded();
-    print("got encoded {s}\n", .{enc});
+    //var enc = try jd.to_encoded();
+    //print("got encoded {s}\n", .{enc});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
