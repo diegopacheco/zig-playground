@@ -35,7 +35,7 @@ pub fn main() !void {
     print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
 
     var list = try jd.to_u8_array();
-    print("{s}\n", .{list});
+    print("look what I got == {s}\n", .{list});
 
     var buf: []u8 = try allocator.alloc(u8, 10);
     var result: []const u8 = Codecs.Encoder.encode(buf, jd.name);
