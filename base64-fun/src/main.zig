@@ -14,7 +14,7 @@ const Person = struct {
         return .{ .allocator = allocator, .id = id, .name = name, .mail = mail };
     }
 
-    pub fn to_u8_array(self: *Self) ![]u8 {
+    pub fn to_u8_array(self: *Self) ![]const u8 {
         var list = ArrayList(u8).init(self.allocator);
         defer list.deinit();
 
@@ -24,7 +24,7 @@ const Person = struct {
         try list.append(',');
         try list.appendSlice(self.mail);
 
-        return list.items;
+        return list.toOwnedSliceSentinel();
     }
 };
 
