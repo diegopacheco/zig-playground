@@ -57,8 +57,8 @@ pub fn main() !void {
     print("got encoded [{s}]\n", .{enc});
 
     var bb: []u8 = try allocator.alloc(u8, 28);
-    //try jd.to_decoded(bb, enc);
-    //print("back baby = {s}\n", .{bb});
+    try jd.to_decoded(bb, enc);
+    print("back baby = {s}\n", .{bb});
 
     //
     //  Base64 encode
