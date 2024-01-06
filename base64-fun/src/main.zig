@@ -27,14 +27,13 @@ const Person = struct {
         return list.toOwnedSlice();
     }
 
-    pub fn to_encoded(self: *Self) ![]u8 {
+    pub fn to_encoded(self: *Self) ![]const u8 {
         var buf: []u8 = try self.allocator.alloc(u8, 28);
-        var slice = try self.to_slice();
+        var slice: []u8 = try self.to_slice();
         var result: []const u8 = Codecs.Encoder.encode(buf, slice);
 
         defer self.allocator.free(slice);
-        defer self.allocator.free(result);
-        return buf;
+        return result;
     }
 
     pub fn to_decoded(self: *Self, buf: []u8, source: []const u8) !void {
@@ -82,7 +81,7 @@ pub fn main() !void {
     allocator.free(buffer);
     allocator.free(list);
     allocator.free(bb);
-    //allocator.free(enc);
+    allocator.free(enc);
 }
 
 test "simple test" {
