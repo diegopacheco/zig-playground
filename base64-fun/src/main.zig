@@ -24,7 +24,7 @@ const Person = struct {
         try list.append(',');
         try list.appendSlice(self.mail);
 
-        return list.toOwnedSliceSentinel();
+        return list.toOwnedSliceSentinel(0);
     }
 };
 
