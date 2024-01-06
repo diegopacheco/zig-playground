@@ -30,6 +30,7 @@ pub fn main() !void {
     print("Decoded {s}\n", .{buffer});
 
     allocator.free(buf);
+    allocator.free(buffer);
 }
 
 test "simple test" {
