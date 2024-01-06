@@ -30,6 +30,8 @@ const Person = struct {
     pub fn to_encoded(self: *Self) ![]const u8 {
         var buf: []u8 = try self.allocator.alloc(u8, 28);
         var result: []const u8 = Codecs.Encoder.encode(buf, try self.to_slice());
+        defer self.allocator.free(buf);
+
         return result;
     }
 };
