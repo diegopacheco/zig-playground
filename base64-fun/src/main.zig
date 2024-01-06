@@ -28,6 +28,9 @@ pub fn main() !void {
     var buffer: []u8 = try allocator.alloc(u8, 10);
     _ = try Codecs.Decoder.decode(buffer, result);
     print("Decoded {s}\n", .{buffer});
+
+    allocator.destroy(buf);
+    allocator.destroy(buffer);
 }
 
 test "simple test" {
