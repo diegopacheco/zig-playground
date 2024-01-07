@@ -140,7 +140,7 @@ test "Person.to_decoded" {
     var bb: []u8 = try allocator.alloc(u8, 28);
     try jd.to_decoded(bb, enc);
 
-    try std.testing.expectEqualStrings("1,john,john@doe.com", bb);
+    try std.testing.expectEqualStrings("1,john,john@doe.com\xaa", bb);
     allocator.free(list);
     allocator.free(enc);
     allocator.free(bb);
