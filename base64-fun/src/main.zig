@@ -140,7 +140,7 @@ test "Person.to_decoded" {
     var bb: []u8 = try allocator.alloc(u8, 28);
     try jd.to_decoded(bb, enc);
 
-    try std.testing.expectEqualStrings("1,john,john@doe.com\xaa", bb);
+    try std.testing.expectEqualSentinel(u8, 0, "1,john,john@doe.com", bb);
     allocator.free(list);
     allocator.free(enc);
     allocator.free(bb);
