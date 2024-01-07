@@ -127,3 +127,21 @@ test "Person.to_encoded" {
     allocator.free(list);
     allocator.free(enc);
 }
+
+test "Person.to_decoded" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var jd = Person.init(allocator, '1', "john", "john@doe.com");
+    var list = try jd.to_slice();
+    var enc = try jd.to_encoded();
+
+    var bb: []u8 = try allocator.alloc(u8, 28);
+    try jd.to_decoded(bb, enc);
+
+    try std.testing.expectEqualStrings("1,john,john@doe.com\xaa", bb);
+    allocator.free(list);
+    allocator.free(enc);
+    allocator.free(bb);
+}
