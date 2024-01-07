@@ -98,14 +98,15 @@ test "Person.init" {
     try std.testing.expectEqualStrings("john@doe.com", mail);
 }
 
-test "Person.init 2" {
+test "Person.to_slice" {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     var allocator = gpa.allocator();
 
     var jd = Person.init(allocator, '1', "john", "john@doe.com");
-    print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
+    var list = try jd.to_slice();
+    print("look what I got == [{s}]\n", .{list});
 
-    var name: []const u8 = jd.name;
-    try std.testing.expectEqualStrings("john", name);
+    try std.testing.expectEqualStrings("1,john,john@doe.com", list);
+    allocator.free(list);
 }
