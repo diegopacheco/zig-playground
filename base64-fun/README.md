@@ -1,3 +1,17 @@
+### Zig Version
+```
+0.11.0
+```
+
+### Supported Operations
+Person 
+```
+init              : Init a Person struct.
+to_slice          : Return a slice of []u8 to the client(client will owen the memory) this is the format `id,name,email`
+to_encoded        : Returns []const u8 base64 encoded of id,name,email
+to_decoded        : Base64 Decoded into a reference buffer: `buf: []u8` returns void
+```
+
 ### Program Output
 ```bash
 ❯ zig build run
