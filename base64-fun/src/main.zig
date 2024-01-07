@@ -84,9 +84,28 @@ pub fn main() !void {
     allocator.free(enc);
 }
 
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
+test "Person.init" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var jd = Person.init(allocator, '1', "john", "john@doe.com");
+    print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
+
+    var name: []const u8 = jd.name;
+    var mail: []const u8 = jd.mail;
+    try std.testing.expectEqualStrings("john", name);
+    try std.testing.expectEqualStrings("john@doe.com", mail);
+}
+
+test "Person.init 2" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var jd = Person.init(allocator, '1', "john", "john@doe.com");
+    print("Person id: {d}, name: {s}, email:{s}\n", .{ jd.id, jd.name, jd.mail });
+
+    var name: []const u8 = jd.name;
+    try std.testing.expectEqualStrings("john", name);
 }
