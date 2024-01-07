@@ -110,3 +110,20 @@ test "Person.to_slice" {
     try std.testing.expectEqualStrings("1,john,john@doe.com", list);
     allocator.free(list);
 }
+
+test "Person.to_encoded" {
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    var allocator = gpa.allocator();
+
+    var jd = Person.init(allocator, '1', "john", "john@doe.com");
+    var list = try jd.to_slice();
+    print("look what I got == [{s}]\n", .{list});
+
+    var enc = try jd.to_encoded();
+    print("got encoded [{s}]\n", .{enc});
+
+    try std.testing.expectEqualStrings("MSxqb2huLGpvaG5AZG9lLmNvbQ==", enc);
+    allocator.free(list);
+    allocator.free(enc);
+}
