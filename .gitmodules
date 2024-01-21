@@ -19,3 +19,6 @@
 [submodule "zig-clap-fun/libs/clap"]
 	path = zig-clap-fun/libs/clap
 	url = https://github.com/Hejsil/zig-clap.git
+[submodule "mustache-zig-fun/libs/mustache-zig"]
+	path = mustache-zig-fun/libs/mustache-zig
+	url = https://github.com/batiati/mustache-zig.git
