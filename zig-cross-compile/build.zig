@@ -20,7 +20,7 @@ pub fn build(b: *Builder) void {
 
     exe.addCSourceFile(.{
         .file = .{
-            .path = "./test.c",
+            .path = "./src/test.c",
         },
         .flags = &[_][]const u8{"-std=c99"},
     });
@@ -32,7 +32,7 @@ pub fn build(b: *Builder) void {
             .target = t,
             .optimize = optimize,
             .root_source_file = .{
-                .path = "./mathtest.zig",
+                .path = "./src/mathtest.zig",
             },
         });
         exe.linkLibrary(lib);
