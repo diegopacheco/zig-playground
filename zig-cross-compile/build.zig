@@ -1,24 +1,21 @@
 const std = @import("std");
 const Builder = @import("std").build.Builder;
 
-pub fn build(b: *Builder) void {
-    const target = b.standardTargetOptions(.{});
-    const optimize = b.standardOptimizeOption(.{});
+const targets = [_]std.zig.CrossTarget{
+    .{ .cpu_arch = .x86_64, .os_tag = .linux },
+    .{ .cpu_arch = .x86_64, .os_tag = .windows },
+    //.{ .cpu_arch = .aarch64, .os_tag = .macos },
+};
 
-    const lib = b.addSharedLibrary(.{
-        .name = "mathtest",
-        .target = target,
-        .optimize = optimize,
-        .root_source_file = .{
-            .path = "./mathtest.zig",
-        },
-    });
+pub fn build(b: *Builder) void {
+    //const target = b.standardTargetOptions(.{});
+    const optimize = b.standardOptimizeOption(.{});
 
     const exe = b.addExecutable(.{
         .name = "test",
         //.root_source_file = .{ .path = "test.c" },
-        .target = target,
-        .optimize = optimize,
+        //.target = t,
+        //.optimize = optimize,
     });
 
     exe.addCSourceFile(.{
@@ -27,8 +24,19 @@ pub fn build(b: *Builder) void {
         },
         .flags = &[_][]const u8{"-std=c99"},
     });
-    exe.linkLibrary(lib);
     exe.linkSystemLibrary("c");
+
+    for (targets) |t| {
+        const lib = b.addSharedLibrary(.{
+            .name = "mathtest",
+            .target = t,
+            .optimize = optimize,
+            .root_source_file = .{
+                .path = "./mathtest.zig",
+            },
+        });
+        exe.linkLibrary(lib);
+    }
 
     b.default_step.dependOn(&exe.step);
     const run_cmd = b.addRunArtifact(exe);
