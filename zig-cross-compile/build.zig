@@ -14,10 +14,9 @@ pub fn build(b: *Builder) void {
         },
     });
 
-    //const exe = b.addExecutable("test", null);
     const exe = b.addExecutable(.{
         .name = "test",
-        //.root_source_file = .{ .path = "mathtest.zig" },
+        //.root_source_file = .{ .path = "test.c" },
         .target = target,
         .optimize = optimize,
     });
@@ -32,8 +31,13 @@ pub fn build(b: *Builder) void {
     exe.linkSystemLibrary("c");
 
     b.default_step.dependOn(&exe.step);
-
     const run_cmd = b.addRunArtifact(exe);
+    run_cmd.step.dependOn(b.getInstallStep());
+    if (b.args) |args| {
+        run_cmd.addArgs(args);
+    }
+    const run_step = b.step("run", "Run the app");
+    run_step.dependOn(&run_cmd.step);
 
     const test_step = b.step("test", "Test the program");
     test_step.dependOn(&run_cmd.step);
