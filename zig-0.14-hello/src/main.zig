@@ -1,33 +1,49 @@
-//! By convention, main.zig is where your main function lives in the case that
-//! you are building an executable. If you are making a library, the convention
-//! is to delete this file and start with root.zig instead.
 const std = @import("std");
 
+pub fn Person(comptime T: type) type {
+    return struct {
+        allocator: *std.mem.Allocator,
+        name: []const u8,
+        age: T,
+        friends: []const []const u8,
+
+        const Self = @This();
+
+        pub fn init(allocator: *std.mem.Allocator, name: []const u8, age: T) !*Self {
+            const self = try allocator.create(Self);
+            self.* = Self{
+                .allocator = allocator,
+                .name = name,
+                .age = age,
+                .friends = &[_][]const u8{},
+            };
+            return self;
+        }
+
+        pub fn addFriend(self: *Self, friend: []const u8) !void {
+            const mutable_friends = @constCast(self.friends);
+            var new_friends = try self.allocator.realloc(mutable_friends, self.friends.len + 1);
+            new_friends[self.friends.len] = friend;
+            self.friends = new_friends;
+        }
+
+        pub fn deinit(self: *Self) void {
+            self.allocator.free(self.friends);
+            self.allocator.destroy(self);
+        }
+    };
+}
+
 pub fn main() !void {
-    // Prints to stderr (it's a shortcut based on `std.io.getStdErr()`)
-    std.debug.print("All your {s} are belong to us.\n", .{"codebase"});
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
 
-    // stdout is for the actual output of your application, for example if you
-    // are implementing gzip, then only the compressed bytes should be sent to
-    // stdout, not any debugging messages.
-    const stdout_file = std.io.getStdOut().writer();
-    var bw = std.io.bufferedWriter(stdout_file);
-    const stdout = bw.writer();
+    var person = try Person(u32).init(@constCast(&allocator), "John Doe", 48);
+    defer person.deinit();
 
-    try stdout.print("Run `zig build test` to run the tests.\n", .{});
+    try person.addFriend("Alice");
+    try person.addFriend("Bob");
 
-    try bw.flush(); // Don't forget to flush!
-}
-
-test "simple test" {
-    var list = std.ArrayList(i32).init(std.testing.allocator);
-    defer list.deinit(); // Try commenting this out and see if zig detects the memory leak!
-    try list.append(42);
-    try std.testing.expectEqual(@as(i32, 42), list.pop());
-}
-
-test "fuzz example" {
-    // Try passing `--fuzz` to `zig build` and see if it manages to fail this test case!
-    const input_bytes = std.testing.fuzzInput(.{});
-    try std.testing.expect(!std.mem.eql(u8, "canyoufindme", input_bytes));
+    std.debug.print("Name: {s}, Age: {d}, Friends: {s}, {s}\n", .{ person.name, person.age, person.friends[0], person.friends[1] });
 }
