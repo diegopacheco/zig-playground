@@ -3,7 +3,8 @@ zig-out/
 zig-cache/
 .idea/
 .zigmod/
-
+.zig-cache/
+ 
 ## Lib and Rust
 target/
 *.so
