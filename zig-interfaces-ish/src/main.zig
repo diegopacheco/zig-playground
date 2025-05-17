@@ -19,6 +19,10 @@ const Circle = struct {
     }
 };
 
+fn draw(itf: interface.Interface) void {
+    itf.concreteFn();
+}
+
 pub fn main() !void {
     const square = Square{ .side_length = 5 };
     const circle = Circle{ .side_length = 10 };
@@ -26,6 +30,6 @@ pub fn main() !void {
     const squareInterface = interface.Interface.init(&square);
     const circleInterface = interface.Interface.init(&circle);
 
-    squareInterface.concreteFn();
-    circleInterface.concreteFn();
+    draw(squareInterface);
+    draw(circleInterface);
 }
