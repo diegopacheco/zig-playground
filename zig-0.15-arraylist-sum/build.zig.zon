@@ -1,0 +1,12 @@
+.{
+    .name = .zig_0_15_arraylist_sum,
+    .version = "0.0.0",
+    .fingerprint = 0xa0b0c0d0e0f0000d,
+    .minimum_zig_version = "0.15.1",
+    .dependencies = .{},
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
