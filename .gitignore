@@ -13,3 +13,12 @@ target/
 ## Exe
 main
 main.o
+*.pyc
+venv/
+.venv/
+*.egg-info/
+.pytest_cache/
+*.o
+*.dylib
+*.out
+.DS_Store
